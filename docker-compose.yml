@@ -1,9 +1,10 @@
 version: "2"
 services:
   api:
-    image: lift-api
+    build: .
     ports:
     - 4000:4000
+
   postgres:
     image: postgres:9.6.2
     environment:
