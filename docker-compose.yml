@@ -2,10 +2,14 @@ version: "2"
 services:
   api:
     build: .
+    depends_on:
+    - postgres
     ports:
     - 4000:4000
 
   postgres:
     image: postgres:9.6.2
+    volumes:
+    - /data/postgres:/var/lib/postgresql/data
     environment:
     - POSTGRES_DB=lift_dev
