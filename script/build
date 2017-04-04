@@ -1,0 +1,39 @@
+#! /usr/bin/env bash
+
+# script/build: Build and push Docker image of currently checked out application
+#               state.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+DOCKER_PUSH=false
+GIT_COMMIT=$(git rev-parse --short @)
+IMAGE_NAME="soud/lift-api:$GIT_COMMIT"
+
+usage() {
+  echo "Usage: $0 [OPTIONS]" >&2
+  echo >&2
+  echo "Options: " >&2
+  printf "    %-15s  %-30s\n" "-p, --push" "Push image to docker registry" >&2
+  printf "    %-15s  %-30s\n" "-h, --help" "Show this" >&2
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -p|--push) DOCKER_PUSH=true ;;
+    -h|--help) usage; exit 1 ;;
+    (--) shift; break ;;
+    (-*) echo "$0: error - unrecognized option $1" >&2; exit 1 ;;
+    (*) break ;;
+  esac
+  shift
+done
+
+docker build -t "$IMAGE_NAME" .
+
+if [ $DOCKER_PUSH = true ]; then
+  echo 'Pushing to registry...'
+
+  docker push "$IMAGE_NAME"
+fi
