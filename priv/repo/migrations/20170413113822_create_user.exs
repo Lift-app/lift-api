@@ -1,7 +1,7 @@
 defmodule Lift.Repo.Migrations.CreateUser do
   use Ecto.Migration
 
-  def up() do
+  def up do
     create table(:users) do
       add :username,      :string
       add :email,         :string
@@ -12,7 +12,7 @@ defmodule Lift.Repo.Migrations.CreateUser do
     end
   end
 
-  def down() do
+  def down do
     drop table(:users)
   end
 end
