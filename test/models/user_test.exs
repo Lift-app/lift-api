@@ -3,7 +3,7 @@ defmodule Lift.UserTest do
 
   alias Lift.User
 
-  @valid_attrs %{username: "some content"}
+  @valid_attrs %{username: "some content", email: "foo", password_hash: "bar"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

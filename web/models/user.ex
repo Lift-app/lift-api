@@ -10,7 +10,7 @@ defmodule Lift.User do
     timestamps()
   end
 
-  @params ~w(username email password_hash is_banned)
+  @params ~w(username email password_hash is_banned)a
 
   defp constraints(struct) do
     struct
