@@ -9,7 +9,7 @@ defmodule Lift.Repo.Migrations.CreateCategory do
       timestamps()
     end
 
-    create unique_index(:categories, [:name])
+    create unique_index(:categories, ["lower(name)"])
   end
 
   def down do

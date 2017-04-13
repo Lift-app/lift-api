@@ -11,7 +11,8 @@ defmodule Lift.Repo.Migrations.CreateUser do
       timestamps()
     end
 
-    create unique_index(:users, [:username, :email])
+    create unique_index(:users, ["lower(username)"])
+    create unique_index(:users, ["lower(email)"])
   end
 
   def down do
