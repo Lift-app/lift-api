@@ -10,12 +10,21 @@ defmodule Lift.User do
     timestamps()
   end
 
+  @params ~w(username email password_hash is_banned)
+
+  defp constraints(struct) do
+    struct
+    |> unique_constraint(:email)
+    |> unique_constraint(:username)
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:username])
-    |> validate_required([:username])
+    |> cast(params, @params)
+    |> constraints
+    |> validate_required(@params)
   end
 end
