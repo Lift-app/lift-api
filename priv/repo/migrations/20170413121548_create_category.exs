@@ -3,7 +3,7 @@ defmodule Lift.Repo.Migrations.CreateCategory do
 
   def up do
     create table(:categories) do
-      add :name,        :string
+      add :name,        :string, null: false
       add :description, :string, null: true
 
       timestamps()
