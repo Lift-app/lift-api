@@ -9,3 +9,17 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias Lift.{Repo, User, Category}
+
+# Users
+Repo.insert!(%User{
+  username: "rimko",
+  email: "rimko@gmail.com",
+  password_hash: "foo"
+})
+
+# Categories
+["Financiën", "Werk", "Gezondheid", "Dagelijks leven"] |> Enum.each(fn category ->
+  Repo.insert!(%Category{name: category})
+end)

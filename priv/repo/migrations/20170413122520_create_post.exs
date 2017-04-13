@@ -3,8 +3,10 @@ defmodule Lift.Repo.Migrations.CreatePost do
 
   def up do
     create table(:posts) do
-      add :body,      :text, null: false
-      add :is_locked, :boolean, default: false, null: false
+      add :user_id,     references(:users)
+      add :category_id, references(:categories)
+      add :body,        :text, null: false
+      add :is_locked,   :boolean, default: false, null: false
 
       timestamps()
     end

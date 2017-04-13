@@ -3,7 +3,7 @@ defmodule Lift.Post do
 
   schema "posts" do
     belongs_to :user,     Lift.User
-    belongs_to :category, Lift.Categories
+    belongs_to :category, Lift.Category
 
     field :body,      :string
     field :is_locked, :boolean, default: false
@@ -11,7 +11,7 @@ defmodule Lift.Post do
     timestamps()
   end
 
-  @params ~w(body is_locked)a
+  @params ~w(user_id category_id body is_locked)a
 
   defp constraints(struct) do
     struct

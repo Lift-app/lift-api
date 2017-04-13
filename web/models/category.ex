@@ -8,6 +8,8 @@ defmodule Lift.Category do
     timestamps()
   end
 
+  @params ~w(name description)a
+
   defp constraints(struct) do
     struct
     |> unique_constraint(:name)
@@ -18,8 +20,8 @@ defmodule Lift.Category do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:name, :description])
+    |> cast(params, @params)
     |> constraints
-    |> validate_required([:name, :description])
+    |> validate_required(@params)
   end
 end
