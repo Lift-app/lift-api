@@ -16,7 +16,7 @@ defmodule Lift.PostController do
         conn
         |> put_status(:created)
         |> put_resp_header("location", post_path(conn, :show, post))
-        |> render("show.json", post: post)
+        |> render("show.json", post: Repo.preload(post, [:category, :user]))
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -39,7 +39,7 @@ defmodule Lift.PostController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(AuthTest.ChangesetView, "error.json", changeset: changeset)
+        |> render(Lift.ChangesetView, "error.json", changeset: changeset)
     end
   end
 

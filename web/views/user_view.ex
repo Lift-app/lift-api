@@ -10,13 +10,6 @@ defmodule Lift.UserView do
   end
 
   def render("user.json", %{user: user}) do
-    %{
-      username: user.username,
-      email: user.email,
-      is_banned: user.is_banned,
-
-      created_at: user.inserted_at,
-      updated_at: user.updated_at
-    }
+    Map.take(user, [:username, :email, :is_banned, :created_at, :updated_at])
   end
 end
