@@ -18,6 +18,11 @@ defmodule Lift.User do
     |> unique_constraint(:username)
   end
 
+  defp validations(struct) do
+    struct
+    |> validate_format(:email, ~r/\w+@\w+\.\w+/)
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
@@ -25,6 +30,7 @@ defmodule Lift.User do
     struct
     |> cast(params, @required_fields)
     |> constraints
+    |> validations
     |> validate_required(@required_fields)
   end
 end

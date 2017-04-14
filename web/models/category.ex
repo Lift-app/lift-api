@@ -8,11 +8,12 @@ defmodule Lift.Category do
     timestamps()
   end
 
-  @required_fields ~w(name description)a
+  @required_fields ~w(name)a
+  @optional_fields ~w(description)a
 
   defp constraints(struct) do
     struct
-    |> unique_constraint(:name)
+    |> unique_constraint(:name, name: :categories_lower_name_index)
   end
 
   @doc """
@@ -20,7 +21,7 @@ defmodule Lift.Category do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, @required_fields)
+    |> cast(params, @required_fields ++ @optional_fields)
     |> constraints
     |> validate_required(@required_fields)
   end
