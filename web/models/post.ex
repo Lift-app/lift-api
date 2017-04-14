@@ -11,7 +11,7 @@ defmodule Lift.Post do
     timestamps()
   end
 
-  @params ~w(user_id category_id body is_locked)a
+  @required_fields ~w(user_id category_id body is_locked)a
 
   defp constraints(struct) do
     struct
@@ -23,8 +23,8 @@ defmodule Lift.Post do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, @params)
+    |> cast(params, @required_fields)
     |> constraints
-    |> validate_required(@params)
+    |> validate_required(@required_fields)
   end
 end

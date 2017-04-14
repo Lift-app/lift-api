@@ -10,7 +10,7 @@ defmodule Lift.User do
     timestamps()
   end
 
-  @params ~w(username email password_hash is_banned)a
+  @required_fields ~w(username email password_hash is_banned)a
 
   defp constraints(struct) do
     struct
@@ -23,8 +23,8 @@ defmodule Lift.User do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, @params)
+    |> cast(params, @required_fields)
     |> constraints
-    |> validate_required(@params)
+    |> validate_required(@required_fields)
   end
 end
