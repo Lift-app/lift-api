@@ -36,5 +36,7 @@ defmodule Lift.Endpoint do
     key: "_lift_key",
     signing_salt: "t8p7zCST"
 
+  plug CORSPlug
+
   plug Lift.Router
 end
