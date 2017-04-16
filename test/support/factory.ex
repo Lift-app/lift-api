@@ -3,8 +3,8 @@ defmodule Lift.Factory do
 
   def user_factory do
     %Lift.User{
-      username: "rimko",
-      email: "rimko@gmail.com",
+      username: sequence("rimko"),
+      email: sequence("rimko@gmail.com"),
       password_hash: "foo"
     }
   end
