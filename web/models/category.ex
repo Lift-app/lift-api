@@ -4,8 +4,6 @@ defmodule Lift.Category do
   schema "categories" do
     field :name,        :string
     field :description, :string
-
-    timestamps()
   end
 
   @required_fields ~w(name)a

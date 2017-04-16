@@ -5,8 +5,6 @@ defmodule Lift.Repo.Migrations.CreateCategory do
     create table(:categories) do
       add :name,        :string, null: false
       add :description, :string, null: true
-
-      timestamps()
     end
 
     create unique_index(:categories, ["lower(name)"])
