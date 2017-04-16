@@ -20,7 +20,7 @@ defmodule Lift.User do
 
   defp validations(struct) do
     struct
-    |> validate_format(:email, ~r/\w+@\w+\.\w+/)
+    |> validate_format(:email, ~r/.+@.+\..+/)
   end
 
   @doc """
