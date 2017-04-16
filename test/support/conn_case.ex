@@ -25,7 +25,10 @@ defmodule Lift.ConnCase do
       import Ecto.Changeset
       import Ecto.Query
 
+      import Lift.ConnCaseHelper
       import Lift.Router.Helpers
+
+      import Lift.Factory
 
       # The default endpoint for testing
       @endpoint Lift.Endpoint
