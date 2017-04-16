@@ -6,6 +6,10 @@ services:
     - postgres
     ports:
     - 4000:4000
+    links:
+    - postgres
+    environment:
+    - POSTGRES_HOST=postgres
 
   postgres:
     image: postgres:9.6.2

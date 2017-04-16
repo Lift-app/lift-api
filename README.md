@@ -1,4 +1,4 @@
-# Lift
+# Lift API [![Build Status](https://travis-ci.org/Lift-app/lift-api.svg?branch=master)](https://travis-ci.org/Lift-app/lift-api)
 
 To start your Phoenix app:
 
