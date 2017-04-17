@@ -4,6 +4,7 @@ defmodule Lift.Post do
   schema "posts" do
     belongs_to :user,     Lift.User
     belongs_to :category, Lift.Category
+    has_many   :comments, Lift.Comment
 
     field :body,      :string
     field :is_locked, :boolean, default: false

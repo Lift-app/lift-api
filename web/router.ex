@@ -10,7 +10,10 @@ defmodule Lift.Router do
 
     resources "/posts", PostController, except: [:new, :edit]
 
-    resources "/categories", CategoryController, except: [:new, :edit]
+    get "/posts/:post_id/comments", CommentController, :index
+    resources "/comments", CommentController, except: [:new, :edit, :index]
+
     get "/categories/:category_ids/posts", CategoryController, :posts
+    resources "/categories", CategoryController, except: [:new, :edit]
   end
 end

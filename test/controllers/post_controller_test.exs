@@ -1,8 +1,11 @@
 defmodule Lift.PostControllerTest do
   use Lift.ConnCase
 
-  test "#index renders a list of posts" do
-    conn = build_conn()
+  setup do
+    {:ok, conn: build_conn()}
+  end
+
+  test "#index renders a list of posts", %{conn: conn} do
     post = insert(:post)
 
     conn = get(conn, post_path(conn, :index))
@@ -10,8 +13,7 @@ defmodule Lift.PostControllerTest do
     assert json_response(conn, 200) == render_json("index.json", posts: [post])
   end
 
-  test "#show renders a single post" do
-    conn = build_conn()
+  test "#show renders a single post", %{conn: conn} do
     post = insert(:post)
 
     conn = get(conn, post_path(conn, :show, post.id))
@@ -19,8 +21,7 @@ defmodule Lift.PostControllerTest do
     assert json_response(conn, 200) == render_json("show.json", post: post)
   end
 
-  test "#create creates a post" do
-    conn = build_conn()
+  test "#create creates a post", %{conn: conn} do
     post = params_with_assocs(:post)
 
     conn = post(conn, post_path(conn, :create, post))

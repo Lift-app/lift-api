@@ -1,8 +1,11 @@
 defmodule Lift.CategoryControllerTest do
   use Lift.ConnCase
 
-  test "#index renders a list of categories" do
-    conn = build_conn()
+  setup do
+    {:ok, conn: build_conn()}
+  end
+
+  test "#index renders a list of categories", %{conn: conn} do
     category = insert(:category)
 
     conn = get(conn, category_path(conn, :index))
@@ -10,8 +13,7 @@ defmodule Lift.CategoryControllerTest do
     assert json_response(conn, 200) == render_json("index.json", categories: [category])
   end
 
-  test "#show renders a single category" do
-    conn = build_conn()
+  test "#show renders a single category", %{conn: conn} do
     category = insert(:category)
 
     conn = get(conn, category_path(conn, :show, category.id))
@@ -19,8 +21,7 @@ defmodule Lift.CategoryControllerTest do
     assert json_response(conn, 200) == render_json("show.json", category: category)
   end
 
-  test "#create creates a category" do
-    conn = build_conn()
+  test "#create creates a category", %{conn: conn} do
     category = params_with_assocs(:category)
 
     conn = post(conn, category_path(conn, :create, category))
@@ -28,8 +29,7 @@ defmodule Lift.CategoryControllerTest do
     assert json_response(conn, 201)
   end
 
-  test "#posts returns a list of posts filtered by category" do
-    conn = build_conn()
+  test "#posts returns a list of posts filtered by category", %{conn: conn} do
     category = insert(:category)
     posts = insert_list(3, :post, category: category)
 
