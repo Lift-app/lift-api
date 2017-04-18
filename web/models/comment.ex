@@ -7,6 +7,7 @@ defmodule Lift.Comment do
     belongs_to :comment, Lift.Comment, foreign_key: :parent_id
 
     field :body, :string
+    field :deleted, :boolean, default: false
 
     timestamps()
   end
