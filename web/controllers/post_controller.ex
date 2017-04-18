@@ -3,8 +3,16 @@ defmodule Lift.PostController do
 
   alias Lift.Post
 
-  def index(conn, _params) do
-    posts = Repo.all(Post) |> Repo.preload([:category, :user])
+  def index(conn, params) do
+    page = Map.get(params, "page", 1)
+    page_size = Map.get(params, "page_size", 20)
+
+    posts =
+      Post
+      |> order_by(desc: :inserted_at)
+      |> preload([:user, :category])
+      |> Repo.paginate(page: page, page_size: page_size)
+
     render(conn, "index.json", posts: posts)
   end
 
