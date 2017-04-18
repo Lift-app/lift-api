@@ -30,13 +30,17 @@ defmodule Lift.CategoryController do
     render(conn, "show.json", category: category)
   end
 
-  def posts(conn, %{"category_ids" => category_ids}) do
+  def posts(conn, %{"category_ids" => category_ids} = params) do
     categories = String.split(category_ids, ",")
+    page = Map.get(params, "page", 1)
+    page_size = Map.get(params, "page_size", 20)
 
     posts =
-      Repo.all from p in Post,
-        where: p.category_id in ^categories,
-        preload: [:category, :user]
+      Post
+      |> where([p], p.category_id in ^categories)
+      |> order_by(desc: :inserted_at)
+      |> preload([:user, :category])
+      |> Repo.paginate(page: page, page_size: page_size)
 
     render(conn, PostView, "index.json", posts: posts)
   end

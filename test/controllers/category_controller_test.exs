@@ -31,11 +31,11 @@ defmodule Lift.CategoryControllerTest do
 
   test "#posts returns a list of posts filtered by category", %{conn: conn} do
     category = insert(:category)
-    posts = insert_list(3, :post, category: category)
+    post = insert(:post, category: category)
 
     conn = get(conn, "/categories/#{category.id}/posts")
 
-    assert json_response(conn, 200) == render_json(Lift.PostView, "index.json", posts: posts)
+    assert json_response(conn, 200) == render_json(Lift.PostView, "index.json", posts: [post])
   end
 
   defp render_json(template, assigns), do: render_json(Lift.CategoryView,  template, assigns)
