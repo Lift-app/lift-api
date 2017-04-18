@@ -9,8 +9,8 @@ defmodule Lift.CategoryController do
     render(conn, "index.json", categories: categories)
   end
 
-  def create(conn, category_params) do
-    changeset = Category.changeset(%Category{}, category_params)
+  def create(conn, post_params) do
+    changeset = Category.changeset(%Category{}, post_params)
 
     case Repo.insert(changeset) do
       {:ok, category} ->

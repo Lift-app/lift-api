@@ -10,8 +10,8 @@ defmodule Lift.CommentController do
     render(conn, "index.json", comments: comments)
   end
 
-  def create(conn, comment_params) do
-    changeset = Comment.changeset(%Comment{}, comment_params)
+  def create(conn, post_params) do
+    changeset = Comment.changeset(%Comment{}, post_params)
 
     case Repo.insert(changeset) do
       {:ok, comment} ->
