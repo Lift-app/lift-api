@@ -4,7 +4,7 @@ defmodule Lift.CommentController do
   alias Lift.{Comment, Post}
 
   def index(conn, %{"post_id" => post_id}) do
-    post = Repo.get(Post, post_id)
+    post = Repo.get!(Post, post_id)
     comments = Repo.all(from c in assoc(post, :comments), preload: [:user, :comment])
 
     render(conn, "index.json", comments: comments)
