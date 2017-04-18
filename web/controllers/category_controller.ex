@@ -34,10 +34,9 @@ defmodule Lift.CategoryController do
     categories = String.split(category_ids, ",")
 
     posts =
-      Post
-      |> where([p], p.category_id in ^categories)
-      |> Repo.all
-      |> Repo.preload([:category, :user])
+      Repo.all from p in Post,
+        where: p.category_id in ^categories,
+        preload: [:category, :user]
 
     render(conn, PostView, "index.json", posts: posts)
   end

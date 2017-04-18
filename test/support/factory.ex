@@ -23,4 +23,12 @@ defmodule Lift.Factory do
       body: "Test post"
     }
   end
+
+  def comment_factory do
+    %Lift.Comment{
+      user: build(:user),
+      post: build(:post),
+      body: "Just a comment!"
+    }
+  end
 end
