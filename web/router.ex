@@ -15,5 +15,8 @@ defmodule Lift.Router do
 
     get "/categories/:category_ids/posts", CategoryController, :posts
     resources "/categories", CategoryController, except: [:new, :edit]
+
+    put "/comments/:comment_id/like", LikeController, :like_comment
+    put "/posts/:post_id/like", LikeController, :like_post
   end
 end
