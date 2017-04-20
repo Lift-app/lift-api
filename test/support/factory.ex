@@ -31,4 +31,11 @@ defmodule Lift.Factory do
       body: "Just a comment!"
     }
   end
+
+  def like_factory do
+    %Lift.Like{
+      user: build(:user)
+    }
+  end
+
 end

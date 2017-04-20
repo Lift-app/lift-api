@@ -3,7 +3,7 @@ defmodule Lift.LikeTest do
 
   alias Lift.Like
 
-  @valid_attrs %{}
+  @valid_attrs %{user_id: 1, post_id: 1}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

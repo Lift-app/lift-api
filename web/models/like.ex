@@ -1,49 +1,24 @@
 defmodule Lift.Like do
   use Lift.Web, :model
 
-  import Ecto.Query
-
   schema "likes" do
     belongs_to :user, Lift.User
     belongs_to :post, Lift.Post
     belongs_to :comment, Lift.Comment
 
-    field :preexists, :boolean, virtual: true
-    field :type,      :string
-
     timestamps()
   end
 
-  @required_fields ~w(user_id type)a
+  @required_fields ~w(user_id)a
   @optional_fields ~w(comment_id post_id)a
 
-  defp preexists(struct) do
-    case struct do
-      %Ecto.Changeset{valid?: true, changes: changes} ->
-        query =
-          case changes[:type] do
-            "comment" ->
-                 from l in "likes",
-               where: l.user_id    == ^changes[:user_id]
-                  and l.comment_id == ^changes[:comment_id],
-              select: l.id
-            "post" ->
-                 from l in "likes",
-               where: l.user_id == ^changes[:user_id]
-                  and l.post_id == ^changes[:post_id],
-              select: l.id
-        end
-        case Lift.Repo.one(query) do
-          nil ->
-            put_change(struct, :preexists, false)
-           id ->
-            struct
-            |> put_change(:preexists, true)
-            |> put_change(:id, id)
-        end
-      _ ->
-        struct
-    end
+  defp constraints(struct) do
+    struct
+    |> unique_constraint(:user_id, name: :likes_user_id_post_id_index)
+    |> unique_constraint(:user_id, name: :likes_user_id_comment_id_index)
+    |> foreign_key_constraint(:user_id)
+    |> foreign_key_constraint(:post_id)
+    |> foreign_key_constraint(:comment_id)
   end
 
   @doc """
@@ -52,7 +27,7 @@ defmodule Lift.Like do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @required_fields ++ @optional_fields)
+    |> constraints
     |> validate_required(@required_fields)
-    |> preexists()
   end
 end
