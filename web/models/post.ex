@@ -5,6 +5,7 @@ defmodule Lift.Post do
     belongs_to :user,     Lift.User
     belongs_to :category, Lift.Category
     has_many   :comments, Lift.Comment
+    has_many   :likes,    Lift.Like
 
     field :body,      :string
     field :is_locked, :boolean, default: false

@@ -37,5 +37,4 @@ defmodule Lift.Factory do
       user: build(:user)
     }
   end
-
 end

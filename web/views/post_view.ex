@@ -16,6 +16,7 @@ defmodule Lift.PostView do
       category: render_one(post.category, Lift.CategoryView, "category.json"),
       body: post.body,
       is_locked: post.is_locked,
+      # likes: post.likes,
 
       created_at: post.inserted_at,
       updated_at: post.updated_at
