@@ -5,14 +5,6 @@ defmodule Lift.CommentControllerTest do
     {:ok, conn: build_conn()}
   end
 
-  test "GET /comments renders a list of comments", %{conn: conn} do
-    comment = insert(:comment)
-
-    conn = get(conn, comment_path(conn, :index, comment.post_id))
-
-    assert json_response(conn, 200) == render_json("index.json", comments: [comment])
-  end
-
   test "GET /comments/:id renders a single comment", %{conn: conn} do
     comment = insert(:comment)
 
