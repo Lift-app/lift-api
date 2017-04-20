@@ -3,10 +3,8 @@ defmodule Lift.LikeController do
 
   alias Lift.{Like}
 
-  defp ok(conn, data) do
-    conn
-    |> put_status(:ok)
-    |> render(:like, data: data)
+  defp ok(conn) do
+    send_resp(conn, :no_content, "")
   end
 
   defp unproc(conn, changeset) do
@@ -31,14 +29,14 @@ defmodule Lift.LikeController do
       %Ecto.Changeset{changes: %{preexists: false}} ->
         case Repo.insert(like) do
           {:ok, _} ->
-            ok(conn, %{success: true, preexisted: false})
+            ok(conn)
           {:error, changeset} ->
             unproc(conn, changeset)
         end
       %Ecto.Changeset{changes: %{preexists: true}} ->
         case Repo.delete(like) do
           {:ok, _} ->
-            ok(conn, %{success: true, preexisted: true})
+            ok(conn)
           {:error, changeset} ->
             unproc(conn, changeset)
         end
