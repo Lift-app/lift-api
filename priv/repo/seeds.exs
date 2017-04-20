@@ -87,8 +87,7 @@ Enum.each(1..length(posts), fn id ->
     true ->
       Repo.insert!(%Like{
         user_id: 1,
-        post_id: post.id,
-        type: "post"
+        post_id: post.id
       })
     false ->
       :ok
@@ -102,8 +101,7 @@ Enum.each(1..length(comments), fn id ->
     true ->
       Repo.insert!(%Like{
         user_id: 1,
-        comment_id: comment.id,
-        type: "comment"
+        comment_id: comment.id
       })
     false ->
       :ok

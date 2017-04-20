@@ -5,7 +5,7 @@ defmodule Lift.CommentControllerTest do
     {:ok, conn: build_conn()}
   end
 
-  test "#index renders a list of comments", %{conn: conn} do
+  test "GET /comments renders a list of comments", %{conn: conn} do
     comment = insert(:comment)
 
     conn = get(conn, comment_path(conn, :index, comment.post_id))
@@ -13,7 +13,7 @@ defmodule Lift.CommentControllerTest do
     assert json_response(conn, 200) == render_json("index.json", comments: [comment])
   end
 
-  test "#show renders a single comment", %{conn: conn} do
+  test "GET /comments/:id renders a single comment", %{conn: conn} do
     comment = insert(:comment)
 
     conn = get(conn, comment_path(conn, :show, comment.id))
@@ -21,7 +21,7 @@ defmodule Lift.CommentControllerTest do
     assert json_response(conn, 200) == render_json("show.json", comment: comment)
   end
 
-  test "#create creates a comment", %{conn: conn} do
+  test "POST /comments creates a comment", %{conn: conn} do
     comment = params_with_assocs(:comment)
 
     conn = post(conn, comment_path(conn, :create, comment))
@@ -29,7 +29,7 @@ defmodule Lift.CommentControllerTest do
     assert json_response(conn, 201)
   end
 
-  test "#delete soft deletes a comment", %{conn: conn} do
+  test "DELETE /comments/:id soft deletes a comment", %{conn: conn} do
     comment = insert(:comment)
 
     conn = delete(conn, comment_path(conn, :delete, comment.id))
