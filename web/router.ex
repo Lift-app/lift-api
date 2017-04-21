@@ -8,12 +8,26 @@ defmodule Lift.Router do
   scope "/", Lift do
     pipe_through :api
 
-    resources "/posts", PostController, except: [:new, :edit]
+    scope "/categories" do
+      resources "/", CategoryController, except: [:new, :edit]
 
-    get "/posts/:post_id/comments", CommentController, :index
-    resources "/comments", CommentController, except: [:new, :edit, :index]
+      get "/:category_ids/posts", CategoryController, :posts
+    end
 
-    get "/categories/:category_ids/posts", CategoryController, :posts
-    resources "/categories", CategoryController, except: [:new, :edit]
+    scope "/posts" do
+      resources "/", PostController, except: [:new, :edit]
+
+      get "/:id/comments", CommentController, :index
+
+      put "/:id/like", LikeController, :like
+      put "/:id/unlike", LikeController, :unlike
+    end
+
+    scope "/comments" do
+      resources "/", CommentController, except: [:new, :edit, :index]
+
+      put "/:id/like", LikeController, :like
+      put "/:id/unlike", LikeController, :unlike
+    end
   end
 end

@@ -13,6 +13,16 @@ defmodule Lift.PostController do
       |> preload([:user, :category])
       |> Repo.paginate(page: page, page_size: page_size)
 
+    # idk fuck this thing
+    # posts =
+    #   Post
+    #   |> join(:left, [p], l in assoc(p, :likes))
+    #   |> order_by(desc: :inserted_at)
+    #   |> preload([:user, :category, :likes])
+    #   |> group_by([p], p.id)
+    #   |> select([p, l], %{p | likes: count(l.id)})
+    #   |> Repo.paginate(page: page, page_size: page_size)
+
     render(conn, "index.json", posts: posts)
   end
 
