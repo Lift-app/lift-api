@@ -6,7 +6,6 @@ defmodule Lift.Repo.Migrations.CreateLike do
       add :user_id,    references(:users)
       add :post_id,    references(:posts)
       add :comment_id, references(:comments)
-      add :type,       :string
 
       timestamps()
     end
