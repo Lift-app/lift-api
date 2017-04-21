@@ -26,12 +26,10 @@ defmodule Lift.LikeController do
     like =
       case type do
         "posts" ->
-          Repo.one!(from l in Like, where: l.post_id == ^id and l.user_id == ^user_id)
+          Repo.one(from l in Like, where: l.post_id == ^id and l.user_id == ^user_id)
         "comments" ->
           Repo.one!(from l in Like, where: l.comment_id == ^id and l.user_id == ^user_id)
       end
-
-    IO.inspect like
 
     Repo.delete!(like)
     send_resp(conn, :no_content, "")
