@@ -8,6 +8,8 @@ defmodule Lift.Router do
   scope "/", Lift do
     pipe_through :api
 
+    get "/voorjou", PostController, :voorjou
+
     scope "/categories" do
       resources "/", CategoryController, except: [:new, :edit]
 
