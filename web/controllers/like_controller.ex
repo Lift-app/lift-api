@@ -31,6 +31,8 @@ defmodule Lift.LikeController do
           Repo.one!(from l in Like, where: l.comment_id == ^id and l.user_id == ^user_id)
       end
 
+    IO.inspect like
+
     Repo.delete!(like)
     send_resp(conn, :no_content, "")
   end

@@ -3,15 +3,15 @@ defmodule Lift.Factory do
 
   def user_factory do
     %Lift.User{
-      username: sequence("rimko"),
-      email: sequence("rimko@gmail.com"),
+      username: sequence(:username, &"johndoe#{&1}"),
+      email: sequence(:email, &"Johndoe#{&1}@gmail.com"),
       password_hash: "foo"
     }
   end
 
   def category_factory do
     %Lift.Category{
-      name: "Werk",
+      name: sequence(:name, &"Werk#{&1}"),
       description: "Alles over werken"
     }
   end
