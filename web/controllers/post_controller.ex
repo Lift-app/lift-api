@@ -4,15 +4,12 @@ defmodule Lift.PostController do
   alias Lift.Post
 
   def voorjou(conn, params) do
-    page = Map.get(params, "page", 1)
-    page_size = Map.get(params, "page_size", 20)
-
     # TODO: get authenticated user's interests and filter posts by those categories
     posts =
       Post
-      |> order_by(desc: :inserted_at)
-      |> preload([:user, :category])
-      |> Repo.paginate(page: page, page_size: page_size)
+      |> Post.ordered
+      |> Post.with_associations
+      |> Repo.paginate(params)
 
     render(conn, "index.json", posts: posts)
   end
@@ -20,19 +17,9 @@ defmodule Lift.PostController do
   def index(conn, params) do
     posts =
       Post
-      |> order_by(desc: :inserted_at)
-      |> preload([:user, :category])
+      |> Post.ordered
+      |> Post.with_associations
       |> Repo.paginate(params)
-
-    # idk fuck this thing
-    # posts =
-    #   Post
-    #   |> join(:left, [p], l in assoc(p, :likes))
-    #   |> order_by(desc: :inserted_at)
-    #   |> preload([:user, :category, :likes])
-    #   |> group_by([p], p.id)
-    #   |> select([p, l], %{p | likes: count(l.id)})
-    #   |> Repo.paginate(params)
 
     render(conn, "index.json", posts: posts)
   end

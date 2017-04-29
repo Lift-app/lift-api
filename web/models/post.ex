@@ -16,6 +16,21 @@ defmodule Lift.Post do
 
   @required_fields ~w(user_id category_id body)a
 
+  def ordered(query) do
+    order_by(query, desc: :inserted_at)
+  end
+
+  def with_associations(query) do
+    preload(query, [:user, :category])
+  end
+
+  def with_likes(query) do
+    query
+    |> join(:left, [p], l in assoc(p, :likes))
+    |> group_by([p], p.id)
+    |> select([p, l], %{p | likes: count(l.id)})
+  end
+
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
