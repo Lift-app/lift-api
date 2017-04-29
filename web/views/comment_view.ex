@@ -10,7 +10,9 @@ defmodule Lift.CommentView do
   end
 
   def render("comment.json", %{comment: comment}) do
-    user = if comment.deleted, do: nil, else: render_one(comment.user, Lift.UserView, "user.json")
+    user = if comment.deleted or comment.anonymous,
+      do: nil,
+      else: render_one(comment.user, Lift.UserView, "user.json")
     body = if comment.deleted, do: nil, else: comment.body
 
     %{
@@ -20,6 +22,7 @@ defmodule Lift.CommentView do
       user: user,
       body: body,
       deleted: comment.deleted,
+      anonymous: comment.anonymous,
 
       created_at: comment.inserted_at,
       updated_at: comment.updated_at

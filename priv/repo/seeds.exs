@@ -45,7 +45,8 @@ Enum.each(posts, fn question ->
     user_id: 1,
     category_id: Enum.random(1..length(categories)),
     body: question,
-    locked: Enum.random([true, false])
+    locked: Enum.random([true, false, false]),
+    anonymous: Enum.random([true, false, false, false])
   })
 end)
 
@@ -57,9 +58,10 @@ comments = [
 Enum.each(comments, fn comment ->
   Repo.insert!(%Comment{
     user_id: 1,
-    deleted: Enum.random([true, false, true, true]),
+    deleted: Enum.random([true, false, false, false]),
     post_id: Enum.random(1..length(posts)),
-    body: comment
+    body: comment,
+    anonymous: Enum.random([true, false, false, false])
   })
 end)
 

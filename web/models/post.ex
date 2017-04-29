@@ -7,13 +7,14 @@ defmodule Lift.Post do
     has_many   :comments, Lift.Comment
     has_many   :likes,    Lift.Like
 
-    field :body,   :string
-    field :locked, :boolean, default: false
+    field :body,      :string
+    field :locked,    :boolean, default: false
+    field :anonymous, :boolean, default: false
 
     timestamps()
   end
 
-  @required_fields ~w(user_id category_id body locked)a
+  @required_fields ~w(user_id category_id body)a
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
