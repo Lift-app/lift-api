@@ -4,14 +4,11 @@ defmodule Lift.PostController do
   alias Lift.Post
 
   def index(conn, params) do
-    page = Map.get(params, "page", 1)
-    page_size = Map.get(params, "page_size", 20)
-
     posts =
       Post
       |> order_by(desc: :inserted_at)
       |> preload([:user, :category])
-      |> Repo.paginate(page: page, page_size: page_size)
+      |> Repo.paginate(params)
 
     # idk fuck this thing
     # posts =
@@ -21,7 +18,7 @@ defmodule Lift.PostController do
     #   |> preload([:user, :category, :likes])
     #   |> group_by([p], p.id)
     #   |> select([p, l], %{p | likes: count(l.id)})
-    #   |> Repo.paginate(page: page, page_size: page_size)
+    #   |> Repo.paginate(params)
 
     render(conn, "index.json", posts: posts)
   end
