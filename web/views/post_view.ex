@@ -15,7 +15,7 @@ defmodule Lift.PostView do
       user: render_one(post.user, Lift.UserView, "user.json"),
       category: render_one(post.category, Lift.CategoryView, "category.json"),
       body: post.body,
-      is_locked: post.is_locked,
+      locked: post.locked,
       # likes: post.likes,
 
       created_at: post.inserted_at,

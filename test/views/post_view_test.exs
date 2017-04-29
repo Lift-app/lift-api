@@ -33,7 +33,7 @@ defmodule Lift.PostViewTest do
     assert rendered_post == %{
       id: post.id,
       body: post.body,
-      is_locked: post.is_locked,
+      locked: post.locked,
       category: %{
         id: post.category.id,
         name: post.category.name,

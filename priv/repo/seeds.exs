@@ -45,7 +45,7 @@ Enum.each(posts, fn question ->
     user_id: 1,
     category_id: Enum.random(1..length(categories)),
     body: question,
-    is_locked: Enum.random([true, false])
+    locked: Enum.random([true, false])
   })
 end)
 
