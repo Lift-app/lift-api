@@ -10,12 +10,15 @@ defmodule Lift.PostView do
   end
 
   def render("post.json", %{post: post}) do
+    user = if post.anonymous, do: nil, else: render_one(post.user, Lift.UserView, "user.json")
+
     %{
       id: post.id,
-      user: render_one(post.user, Lift.UserView, "user.json"),
+      user: user,
       category: render_one(post.category, Lift.CategoryView, "category.json"),
       body: post.body,
       locked: post.locked,
+      anonymous: post.anonymous,
       # likes: post.likes,
 
       created_at: post.inserted_at,

@@ -40,6 +40,7 @@ defmodule Lift.CommentViewTest do
       },
       body: comment.body,
       deleted: comment.deleted,
+      anonymous: comment.anonymous,
 
       created_at: comment.inserted_at,
       updated_at: comment.updated_at

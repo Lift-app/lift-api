@@ -8,6 +8,7 @@ defmodule Lift.Repo.Migrations.CreateComment do
       add :parent_id, references(:comments)
       add :body,      :text
       add :deleted,   :boolean, default: false, null: false
+      add :anonymous, :boolean, default: false, null: false
 
       timestamps()
     end
