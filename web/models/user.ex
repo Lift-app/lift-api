@@ -5,12 +5,12 @@ defmodule Lift.User do
     field :username,      :string
     field :email,         :string
     field :password_hash, :string
-    field :is_banned,     :boolean, default: false
+    field :banned,        :boolean, default: false
 
     timestamps()
   end
 
-  @required_fields ~w(username email password_hash is_banned)a
+  @required_fields ~w(username email password_hash banned)a
 
   defp constraints(struct) do
     struct

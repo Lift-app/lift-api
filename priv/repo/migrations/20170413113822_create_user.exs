@@ -6,7 +6,7 @@ defmodule Lift.Repo.Migrations.CreateUser do
       add :username,      :string
       add :email,         :string
       add :password_hash, :string
-      add :is_banned,     :boolean, default: false
+      add :banned,        :boolean, default: false
 
       timestamps()
     end
