@@ -17,6 +17,8 @@ defmodule Lift.Router do
 
     scope "/user" do
       resources "/", UserController, only: [:show], singleton: true
+
+      put "/interests", UserController, :update_interests
     end
 
     scope "/categories" do

@@ -4,8 +4,30 @@ defmodule Lift.UserController do
 
   plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
+  alias Lift.{Category, CategoryView}
+
   def show(conn, _params, user, _claims) do
     user = Repo.preload(user, [:categories])
     render(conn, "authenticated_user.json", user: user)
+  end
+
+  def update_interests(conn, %{"interest_ids" => interest_ids}, user, _claims) do
+    user = Repo.preload(user, [:categories])
+    interests = String.split(interest_ids, ",")
+    categories = Category |> where([c], c.id in ^interests) |> Repo.all
+
+    changeset =
+      user
+      |> Ecto.Changeset.change
+      |> Ecto.Changeset.put_assoc(:categories, categories)
+
+    case Repo.update(changeset) do
+      {:ok, user} ->
+        render(conn, CategoryView, "index.json", categories: user.categories)
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Lift.ChangesetView, "error.json", changeset: changeset)
+    end
   end
 end
