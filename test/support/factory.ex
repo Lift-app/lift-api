@@ -5,7 +5,8 @@ defmodule Lift.Factory do
     %Lift.User{
       username: sequence(:username, &"johndoe#{&1}"),
       email: sequence(:email, &"Johndoe#{&1}@gmail.com"),
-      password_hash: "foo"
+      password_hash: "foo",
+      categories: build_list(3, :category)
     }
   end
 

@@ -12,18 +12,20 @@
 
 alias Lift.{Repo, User, Category, Post, Comment, Like}
 
-# Users
-Repo.insert!(%User{
-  username: "steve",
-  email: "steve@gmail.com",
-  password_hash: "foo"
-})
-
 # Categories
 categories = ["Financiën", "Werk", "Gezondheid", "Dagelijks leven"]
 Enum.each(categories, fn category ->
   Repo.insert!(%Category{name: category})
 end)
+
+# Users
+all_categories = Repo.all(Category)
+Repo.insert!(%User{
+  username: "steve",
+  email: "steve@gmail.com",
+  password_hash: "foo",
+  categories: Enum.take_random(all_categories, 3)
+})
 
 # Posts
 posts = [

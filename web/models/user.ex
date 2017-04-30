@@ -2,6 +2,10 @@ defmodule Lift.User do
   use Lift.Web, :model
 
   schema "users" do
+    many_to_many :categories, Lift.Category,
+      join_through: "user_interests",
+      on_replace: :delete
+
     field :username,      :string
     field :email,         :string
     field :password_hash, :string

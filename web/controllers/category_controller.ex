@@ -35,9 +35,9 @@ defmodule Lift.CategoryController do
 
     posts =
       Post
+      |> Post.ordered
+      |> Post.with_associations
       |> where([p], p.category_id in ^categories)
-      |> order_by(desc: :inserted_at)
-      |> preload([:user, :category])
       |> Repo.paginate(params)
 
     render(conn, PostView, "index.json", posts: posts)
