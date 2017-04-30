@@ -19,7 +19,7 @@ defmodule Lift.PostView do
       body: post.body,
       locked: post.locked,
       anonymous: post.anonymous,
-      # likes: post.likes,
+      likes: post.like_count,
 
       created_at: post.inserted_at,
       updated_at: post.updated_at

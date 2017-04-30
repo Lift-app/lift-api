@@ -9,6 +9,7 @@ defmodule Lift.PostController do
       Post
       |> Post.ordered
       |> Post.with_associations
+      |> Post.with_likes
       |> Repo.paginate(params)
 
     render(conn, "index.json", posts: posts)
@@ -19,6 +20,7 @@ defmodule Lift.PostController do
       Post
       |> Post.ordered
       |> Post.with_associations
+      |> Post.with_likes
       |> Repo.paginate(params)
 
     render(conn, "index.json", posts: posts)
@@ -41,7 +43,12 @@ defmodule Lift.PostController do
   end
 
   def show(conn, %{"id" => id}) do
-    post = Repo.get!(Post, id) |> Repo.preload([:category, :user])
+    post =
+      Post
+      |> Post.with_associations
+      |> Post.with_likes
+      |> Repo.get!(id)
+
     render(conn, "show.json", post: post)
   end
 
