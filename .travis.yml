@@ -1,22 +1,18 @@
 language: elixir
 elixir:
 - 1.4.2
-
 sudo: required
 dist: trusty
-
 addons:
-  postgresql: "9.6"
-
+  postgresql: '9.6'
 before_script:
 - psql -c 'create database lift_dev_test;' -U postgres
-
 deploy:
 - provider: script
   script: scripts/deploy
   on:
     branch: master
-
 notifications:
-  on_success: change
-  on_failure: always
+  email: false
+  slack:
+    secure: RfyC2alN1HDG1a6a6BDTOh4gM+KFmVG7wyoITCyycr9MvTuurZGM49KkWrbSCCKzX+1hjHIpsXspLeRDvBr1/V5rVVwJ+sNmigyRzriJRs2TnJQHy9CXhyoioR8QJhv5tqSL5InC61RU3/7uXrz8+MCK9tyCj8SgSN9/s1InXrqhbNsMulum+iAZOXPkJf4SsAArhLt14i7a3H0pEE3fPOaeV44s8yqiX4FFmxewHQQQbtJ6Y1qcVdXlIIsrnVziLLNPOOOAYVb3r7av2CB0R7fO2jfm4DDuY2kScVX5LW8ik6A/Ssu0uqx4A5GAj2NXwX7CNx/3F7lMUlU33t9bQKfIk+eWiK+Yna9WAsUTCLKv29ym2E5sgTYDwZ2gTsalMPpIkquykm85W+BgaWpHJ2v6czcrd8uLJVVWZuJbYN8vBwyxEF0lzCJeoXlBgTxtzv9oBkMm+jTGEl2yKqyxWXvDrxo8ETCxJHW9YFm/L2KdjHMtSxx6+bXlKzm8xu6URx+J0h58HYxpF29DrOJCExhxl9iBv7bWXUZp06XTqpi7auY/kXSTpjN3Q6CSJghpUk1pEZDnNRmtvooMwbH+kGDWEU6MNRlx1q0c45/GbYkpV2U46CYNpmC9FcVI+GmyfvLTJXo1uAS6K7z1RIX9BLTJA+vOL54re/Qm4j+8FFI=
