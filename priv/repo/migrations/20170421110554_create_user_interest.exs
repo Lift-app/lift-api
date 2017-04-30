@@ -3,7 +3,7 @@ defmodule Lift.Repo.Migrations.CreateUserInterest do
 
   def up do
     create table(:user_interests) do
-      add :user_id, references(:users)
+      add :user_id,     references(:users)
       add :category_id, references(:categories)
     end
 
