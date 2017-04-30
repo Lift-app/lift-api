@@ -10,6 +10,11 @@ defmodule Lift.Router do
 
     get "/voorjou", PostController, :voorjou
 
+    scope "/user" do
+      resources "/:user_id/interests", InterestController,
+        only: [:show, :update], singleton: true
+    end
+
     scope "/categories" do
       resources "/", CategoryController, except: [:new, :edit]
 
