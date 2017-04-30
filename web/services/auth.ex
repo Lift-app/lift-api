@@ -4,7 +4,7 @@ defmodule Lift.Auth do
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
   def verify(email, password) do
-    user =  User.find_by_email(email) |> Repo.one
+    user = User.find_by_email(email) |> Repo.one
 
     cond do
       user && checkpw(password, user.password_hash) ->

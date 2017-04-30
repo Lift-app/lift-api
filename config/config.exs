@@ -30,7 +30,7 @@ import_config "#{Mix.env}.exs"
 config :guardian, Guardian,
   allowed_algos: ["HS512"],
   issuer: "Lift",
-  ttl: { 30, :days },
+  ttl: {30, :days},
   allowed_drift: 2000,
   secret_key: System.get_env("GUARDIAN_SECRET_KEY") || "super secret",
   serializer: Lift.GuardianSerializer
