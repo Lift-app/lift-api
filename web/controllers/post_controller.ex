@@ -31,9 +31,6 @@ defmodule Lift.PostController do
 
     case Repo.insert(changeset) do
       {:ok, post} ->
-        # XXX: manually set likes to 0 to be consistent in responses
-        post = %{post | likes: 0}
-
         conn
         |> put_status(:created)
         |> put_resp_header("location", post_path(conn, :show, post))

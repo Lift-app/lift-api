@@ -7,9 +7,10 @@ defmodule Lift.Post do
     has_many   :comments, Lift.Comment
     has_many   :likes,    Lift.Like
 
-    field :body,      :string
-    field :locked,    :boolean, default: false
-    field :anonymous, :boolean, default: false
+    field :body,       :string
+    field :locked,     :boolean, default: false
+    field :anonymous,  :boolean, default: false
+    field :like_count, :integer, default: 0, virtual: true
 
     timestamps()
   end
@@ -31,7 +32,7 @@ defmodule Lift.Post do
     #   group by posts.id
     from p in query,
       left_join: l in assoc(p, :likes),
-      select: %{p | likes: count(l.id)},
+      select: %{p | like_count: count(l.id)},
       group_by: p.id
   end
 
