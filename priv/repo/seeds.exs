@@ -20,12 +20,18 @@ end)
 
 # Users
 all_categories = Repo.all(Category)
-Repo.insert!(%User{
+user = Repo.insert!(User.changeset(%User{}, %{
   username: "steve",
   email: "steve@gmail.com",
-  password_hash: "foo",
-  categories: Enum.take_random(all_categories, 3)
-})
+  password: "foo123"
+}))
+
+# Interests
+user
+|> Repo.preload([:categories])
+|> Ecto.Changeset.change
+|> Ecto.Changeset.put_assoc(:categories, Enum.take_random(all_categories, 3))
+|> Repo.update!
 
 # Posts
 posts = [

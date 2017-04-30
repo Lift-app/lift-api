@@ -1,6 +1,5 @@
 defmodule Lift.CategoryController do
   use Lift.Web, :controller
-  import Ecto.Query
 
   alias Lift.{Category, Post, PostView}
 

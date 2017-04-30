@@ -8,6 +8,8 @@ RUN mix local.hex --force && \
 COPY mix.* ./
 RUN mix do deps.get, deps.compile
 
+RUN cd deps/comeonin && make clean && make
+
 COPY . ./
 
 CMD ["mix", "phoenix.server"]

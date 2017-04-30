@@ -12,4 +12,16 @@ defmodule Lift.UserView do
   def render("user.json", %{user: user}) do
     Map.take(user, [:id, :username])
   end
+
+  def render("authenticated_user.json", %{user: user}) do
+    %{
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      interests: render_many(user.categories, Lift.CategoryView, "category.json"),
+
+      created_at: user.inserted_at,
+      updated_at: user.updated_at,
+    }
+  end
 end
