@@ -5,8 +5,11 @@ defmodule Lift.CommentController do
 
   def index(conn, %{"id" => post_id}) do
     post = Repo.get!(Post, post_id)
-    comments = Repo.all(from c in assoc(post, :comments),
-                        preload: [:user, :comment])
+    comments =
+      assoc(post, :comments)
+      |> Comment.with_associations
+      |> Comment.with_likes
+      |> Repo.all
 
     render(conn, "index.json", comments: comments)
   end
@@ -28,7 +31,13 @@ defmodule Lift.CommentController do
   end
 
   def show(conn, %{"id" => id}) do
-    comment = Repo.get!(Comment, id) |> Repo.preload([:user])
+    comment =
+      Comment
+      |> where([c], c.id == ^id)
+      |> preload([:user])
+      |> Comment.with_likes
+      |> Repo.one!
+
     render(conn, "show.json", comment: comment)
   end
 
