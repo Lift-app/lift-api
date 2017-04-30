@@ -25,10 +25,14 @@ defmodule Lift.Post do
   end
 
   def with_likes(query) do
-    query
-    |> join(:left, [p], l in assoc(p, :likes))
-    |> group_by([p], p.id)
-    |> select([p, l], %{p | likes: count(l.id)})
+    # select count(likes.id) as likes, posts.*
+    #   from posts
+    #   left join likes on (likes.post_id = posts.id) where posts.id=1
+    #   group by posts.id
+    from p in query,
+      left_join: l in assoc(p, :likes),
+      select: %{p | likes: count(l.id)},
+      group_by: p.id
   end
 
   @doc """

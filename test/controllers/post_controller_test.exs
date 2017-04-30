@@ -8,6 +8,9 @@ defmodule Lift.PostControllerTest do
   test "GET /posts renders a list of posts", %{conn: conn} do
     post = insert(:post)
 
+    # Spoof likes
+    post = %{post | likes: 0}
+
     conn = get(conn, post_path(conn, :index))
 
     assert json_response(conn, 200) == render_json("index.json", posts: [post])
@@ -15,6 +18,8 @@ defmodule Lift.PostControllerTest do
 
   test "GET /posts/:id renders a single post", %{conn: conn} do
     post = insert(:post)
+
+    post = %{post | likes: 0}
 
     conn = get(conn, post_path(conn, :show, post.id))
 

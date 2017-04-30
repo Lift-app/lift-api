@@ -33,6 +33,8 @@ defmodule Lift.CategoryControllerTest do
     category = insert(:category)
     post = insert(:post, category: category)
 
+    post = %{post | likes: 0}
+
     conn = get(conn, "/categories/#{category.id}/posts")
 
     assert json_response(conn, 200) == render_json(Lift.PostView, "index.json", posts: [post])
