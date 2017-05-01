@@ -25,8 +25,6 @@ defmodule Lift.TokenController do
     jwt = Guardian.Plug.current_token(conn)
     {:ok, claims} = Guardian.Plug.claims(conn)
 
-    IO.inspect {jwt, claims}
-
     Guardian.revoke!(jwt, claims)
 
     send_resp(conn, :no_content, "")
