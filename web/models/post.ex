@@ -1,6 +1,8 @@
 defmodule Lift.Post do
   use Lift.Web, :model
 
+  import EctoEnum
+
   schema "posts" do
     belongs_to :user,     Lift.User
     belongs_to :category, Lift.Category
@@ -8,6 +10,7 @@ defmodule Lift.Post do
     has_many   :likes,    Lift.Like
 
     field :body,       :string
+    field :type,       TypeEnum
     field :locked,     :boolean, default: false
     field :anonymous,  :boolean, default: false
     field :like_count, :integer, default: 0, virtual: true
@@ -15,7 +18,7 @@ defmodule Lift.Post do
     timestamps()
   end
 
-  @required_fields ~w(user_id category_id body)a
+  @required_fields ~w(user_id category_id body type)a
 
   def ordered(query) do
     order_by(query, desc: :inserted_at)
@@ -37,7 +40,7 @@ defmodule Lift.Post do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, @required_fields)
+    |> Ecto.changeset.cast(params, @required_fields)
     |> constraints
     |> validate_required(@required_fields)
   end

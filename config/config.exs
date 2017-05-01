@@ -10,8 +10,8 @@ config :lift,
   ecto_repos: [Lift.Repo]
 
 config :arc,
-  storage: Arc.Storage.Local
-
+  storage: Arc.Storage.Local,
+  audio_storage_dir: System.get_env("AUDIO_STORAGE_DIR") || "web/uploads/audio/"
 
 # Configures the endpoint
 config :lift, Lift.Endpoint,
