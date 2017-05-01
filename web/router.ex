@@ -3,6 +3,9 @@ defmodule Lift.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+
+    plug Guardian.Plug.VerifyHeader, realm: "Bearer"
+    plug Guardian.Plug.LoadResource
   end
 
   scope "/", Lift do
@@ -10,9 +13,12 @@ defmodule Lift.Router do
 
     get "/voorjou", PostController, :voorjou
 
+    resources "/tokens", TokenController, only: [:create, :delete]
+
     scope "/user" do
-      resources "/:user_id/interests", InterestController,
-        only: [:show, :update], singleton: true
+      resources "/", UserController, only: [:show], singleton: true
+
+      put "/interests", UserController, :update_interests
     end
 
     scope "/categories" do

@@ -8,23 +8,17 @@ defmodule Lift.User do
 
     field :username,      :string
     field :email,         :string
+    field :password,      :string, virtual: true
     field :password_hash, :string
     field :banned,        :boolean, default: false
 
     timestamps()
   end
 
-  @required_fields ~w(username email password_hash banned)a
+  @required_fields ~w(username email password)a
 
-  defp constraints(struct) do
-    struct
-    |> unique_constraint(:email)
-    |> unique_constraint(:username)
-  end
-
-  defp validations(struct) do
-    struct
-    |> validate_format(:email, ~r/.+@.+\..+/)
+  def find_by_email(email) do
+    from u in __MODULE__, where: u.email == ^email
   end
 
   @doc """
@@ -36,5 +30,26 @@ defmodule Lift.User do
     |> constraints
     |> validations
     |> validate_required(@required_fields)
+    |> hash_password
+  end
+
+  defp constraints(struct) do
+    struct
+    |> unique_constraint(:email)
+    |> unique_constraint(:username)
+  end
+
+  defp validations(struct) do
+    struct
+    |> validate_format(:email, ~r/.+@.+\..+/)
+    |> validate_length(:password, min: 5)
+  end
+
+  defp hash_password(struct) do
+    if password = get_change(struct, :password) do
+      put_change(struct, :password_hash, Comeonin.Bcrypt.hashpwsalt(password))
+    else
+      struct
+    end
   end
 end

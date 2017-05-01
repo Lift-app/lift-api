@@ -1,20 +1,18 @@
-defmodule Lift.InterestController do
+defmodule Lift.UserController do
   use Lift.Web, :controller
-  import Ecto.Query
+  use Guardian.Phoenix.Controller
 
-  alias Lift.{User, Category, CategoryView}
+  alias Lift.{Category, CategoryView}
 
-  def show(conn, %{"user_id" => user_id}) do
-    # TODO: get user_id from authenticated user
-    user = Repo.get!(User, user_id)
-    categories = Repo.all(assoc(user, :categories))
+  plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
-    render(conn, CategoryView, "index.json", categories: categories)
+  def show(conn, _params, user, _claims) do
+    user = Repo.preload(user, [:categories])
+    render(conn, "authenticated_user.json", user: user)
   end
 
-  def update(conn, %{"user_id" => user_id, "interest_ids" => interest_ids}) do
-    # TODO: get user_id from authenticated user
-    user = Repo.get!(User, user_id) |> Repo.preload(:categories)
+  def update_interests(conn, %{"interest_ids" => interest_ids}, user, _claims) do
+    user = Repo.preload(user, [:categories])
     interests = String.split(interest_ids, ",")
     categories = Category |> where([c], c.id in ^interests) |> Repo.all
 
