@@ -27,6 +27,11 @@ defmodule Lift.Router do
       get "/:category_ids/posts", CategoryController, :posts
     end
 
+    scope "/users" do
+      resources "/", UserController, only: [:update]
+      put "/:id/avatar", UserController, :avatar
+    end
+
     scope "/posts" do
       resources "/", PostController, except: [:new, :edit]
 
