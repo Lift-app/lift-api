@@ -1,5 +1,6 @@
 defmodule Lift.Post do
   use Lift.Web, :model
+  use Arc.Ecto.Schema
 
   schema "posts" do
     belongs_to :user,     Lift.User
@@ -16,7 +17,7 @@ defmodule Lift.Post do
     timestamps()
   end
 
-  @required_fields ~w(user_id category_id body type)a
+  @required_fields ~w(user_id category_id type)a
 
   def ordered(query) do
     order_by(query, desc: :inserted_at)

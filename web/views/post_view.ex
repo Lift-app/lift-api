@@ -11,12 +11,19 @@ defmodule Lift.PostView do
 
   def render("post.json", %{post: post}) do
     user = if post.anonymous, do: nil, else: render_one(post.user, Lift.UserView, "user.json")
+    body =
+      if post.type == :audio do
+        "#{Lift.Endpoint.url}/media/posts/#{post.id}"
+      else
+        post.body
+      end
 
     %{
       id: post.id,
+      type: post.type,
       user: user,
       category: render_one(post.category, Lift.CategoryView, "category.json"),
-      body: post.body,
+      body: body,
       locked: post.locked,
       anonymous: post.anonymous,
       likes: post.like_count,

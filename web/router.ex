@@ -47,5 +47,9 @@ defmodule Lift.Router do
       put "/:id/like", LikeController, :like
       put "/:id/unlike", LikeController, :unlike
     end
+
+    scope "/media" do
+      get "/posts/:id", MediaController, :post
+    end
   end
 end

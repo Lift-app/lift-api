@@ -2,6 +2,7 @@ defmodule Lift.PostController do
   use Lift.Web, :controller
 
   alias Lift.Post
+  alias Lift.Audio
 
   def voorjou(conn, params) do
     # TODO: get authenticated user's interests and filter posts by those categories
@@ -31,6 +32,10 @@ defmodule Lift.PostController do
 
     case Repo.insert(changeset) do
       {:ok, post} ->
+        if post_params["type"] == "audio" do
+          Audio.store({post_params["audio"], post})
+        end
+
         conn
         |> put_status(:created)
         |> put_resp_header("location", post_path(conn, :show, post))

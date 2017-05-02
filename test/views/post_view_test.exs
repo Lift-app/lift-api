@@ -32,6 +32,7 @@ defmodule Lift.PostViewTest do
 
     assert rendered_post == %{
       id: post.id,
+      type: post.type,
       body: post.body,
       locked: post.locked,
       likes: post.like_count,
