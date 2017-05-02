@@ -21,7 +21,8 @@ defmodule Lift.Factory do
     %Lift.Post{
       user: build(:user),
       category: build(:category),
-      body: "Test post"
+      body: "Test post",
+      type: :text
     }
   end
 

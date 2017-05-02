@@ -1,8 +1,6 @@
 defmodule Lift.Post do
   use Lift.Web, :model
 
-  import EctoEnum
-
   schema "posts" do
     belongs_to :user,     Lift.User
     belongs_to :category, Lift.Category
@@ -40,7 +38,7 @@ defmodule Lift.Post do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> Ecto.changeset.cast(params, @required_fields)
+    |> cast(params, @required_fields)
     |> constraints
     |> validate_required(@required_fields)
   end
