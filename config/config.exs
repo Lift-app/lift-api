@@ -11,7 +11,7 @@ config :lift,
 
 config :arc,
   storage: Arc.Storage.Local,
-  audio_storage_dir: System.get_env("AUDIO_STORAGE_DIR") || "#{Path.absname(".")}/web/uploads/audio/"
+  storage_dir: System.get_env("STORAGE_DIR") || "#{Path.absname(".")}/web/uploads/"
 
 # Configures the endpoint
 config :lift, Lift.Endpoint,

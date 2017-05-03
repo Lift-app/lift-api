@@ -14,9 +14,8 @@ defmodule Lift.Audio do
     version
   end
 
-  def storage_dir(version, {file, scope}) do
+  def storage_dir(_version, {_file, scope}) do
     type = scope.__struct__ |> Module.split |> List.last |> String.downcase
-    IO.inspect scope
-    Application.get_env(:arc, :audio_storage_dir) <> "#{type}/#{scope.id}"
+    Application.get_env(:arc, :storage_dir) <> "audio/#{type}/#{scope.id}"
   end
 end

@@ -50,6 +50,8 @@ defmodule Lift.Router do
 
     scope "/media" do
       get "/posts/:id", MediaController, :post
+      get "/comments/:id", MediaController, :comment
+      get "/avatar/:id", MediaController, :avatar
     end
   end
 end

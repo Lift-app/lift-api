@@ -13,6 +13,7 @@ services:
     - MIX_ENV=prod
     - PORT=4000
     - POSTGRES_HOST=postgres
+    - STORAGE_DIR=/uploads
 
   postgres:
     image: postgres:9.6.2

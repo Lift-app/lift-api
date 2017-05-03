@@ -22,12 +22,12 @@ defmodule Lift.Avatar do
   end
 
   # Override the storage directory:
-  def storage_dir(version, {file, scope}) do
-    "uploads/user/avatars/#{scope.id}"
+  def storage_dir(_version, {_file, scope}) do
+    Application.get_env(:arc, :storage_dir) <> "avatars/#{scope.id}"
   end
 
   # Provide a default URL if there hasn't been a file uploaded
-  def default_url(version, scope) do
+  def default_url(_version, _scope) do
     "https://placehold.it/100x100"
   end
 end
