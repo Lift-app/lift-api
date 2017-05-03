@@ -27,5 +27,5 @@ config :lift, Lift.Repo,
   username: "postgres",
   password: "postgres",
   database: "lift_dev",
-  hostname: System.get_env("POSTGRES_HOST") || "localhost",
+  hostname: "localhost",
   pool_size: 10

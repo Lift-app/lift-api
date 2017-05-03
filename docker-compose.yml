@@ -2,6 +2,7 @@ version: "2"
 services:
   api:
     build: .
+    env_file: .env
     depends_on:
     - postgres
     ports:
@@ -9,6 +10,8 @@ services:
     links:
     - postgres
     environment:
+    - MIX_ENV=prod
+    - PORT=4000
     - POSTGRES_HOST=postgres
 
   postgres:
@@ -16,4 +19,4 @@ services:
     volumes:
     - /data/postgres:/var/lib/postgresql/data
     environment:
-    - POSTGRES_DB=lift_dev
+    - POSTGRES_DB=lift_prod
