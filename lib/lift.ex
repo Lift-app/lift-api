@@ -14,6 +14,8 @@ defmodule Lift do
       supervisor(Lift.Endpoint, []),
       # Start your own worker by calling: Lift.Worker.start_link(arg1, arg2, arg3)
       # worker(Lift.Worker, [arg1, arg2, arg3]),
+      # Add the Redix connection pool to the app as well
+      supervisor(Lift.RedixPool, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

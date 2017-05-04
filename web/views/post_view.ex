@@ -1,6 +1,8 @@
 defmodule Lift.PostView do
   use Lift.Web, :view
 
+  alias Lift.UploadAuth
+
   def render("index.json", %{posts: posts}) do
     %{data: render_many(posts, Lift.PostView, "post.json")}
   end
@@ -13,7 +15,8 @@ defmodule Lift.PostView do
     user = if post.anonymous, do: nil, else: render_one(post.user, Lift.UserView, "user.json")
     body =
       if post.type == :audio do
-        "#{Lift.Endpoint.url}/media/posts/#{post.id}"
+        token = UploadAuth.generate_unique_token()
+        "#{Lift.Endpoint.url}/media/posts/#{post.id}?token=#{token}"
       else
         post.body
       end
