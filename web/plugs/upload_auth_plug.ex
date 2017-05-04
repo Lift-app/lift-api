@@ -1,6 +1,4 @@
 defmodule Lift.UploadAuthPlug do
-  import Plug.Conn
-
   alias Lift.UploadAuth
 
   def init(opts) do
