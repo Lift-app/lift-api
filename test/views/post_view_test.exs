@@ -36,6 +36,7 @@ defmodule Lift.PostViewTest do
       body: post.body,
       locked: post.locked,
       likes: post.like_count,
+      comments: post.comment_count,
       anonymous: post.anonymous,
       category: %{
         id: post.category.id,
