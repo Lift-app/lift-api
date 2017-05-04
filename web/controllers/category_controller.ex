@@ -36,7 +36,7 @@ defmodule Lift.CategoryController do
       Post
       |> Post.ordered
       |> Post.with_associations
-      |> Post.with_likes
+      |> Post.with_likes_and_comments
       |> where([p], p.category_id in ^categories)
       |> Repo.paginate(params)
 

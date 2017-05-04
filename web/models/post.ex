@@ -8,11 +8,12 @@ defmodule Lift.Post do
     has_many   :comments, Lift.Comment
     has_many   :likes,    Lift.Like
 
-    field :body,       :string
-    field :type,       TypeEnum
-    field :locked,     :boolean, default: false
-    field :anonymous,  :boolean, default: false
-    field :like_count, :integer, default: 0, virtual: true
+    field :body,          :string
+    field :type,          TypeEnum
+    field :locked,        :boolean, default: false
+    field :anonymous,     :boolean, default: false
+    field :like_count,    :integer, default: 0, virtual: true
+    field :comment_count, :integer, default: 0, virtual: true
 
     timestamps()
   end
@@ -28,10 +29,11 @@ defmodule Lift.Post do
     preload(query, [:user, :category])
   end
 
-  def with_likes(query) do
+  def with_likes_and_comments(query) do
     from p in query,
       left_join: l in assoc(p, :likes),
-      select: %{p | like_count: count(l.id)},
+      left_join: c in assoc(p, :comments),
+      select: %{p | like_count: count(l.id), comment_count: count(c.id)},
       group_by: p.id
   end
 
