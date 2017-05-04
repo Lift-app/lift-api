@@ -6,9 +6,9 @@ defmodule Lift.Audio do
 
   def __storage, do: Arc.Storage.Local
 
-  def validate({file, _}) do
-    ~w(.ogg) |> Enum.member?(Path.extname(file.file_name))
-  end
+  # def validate({file, _}) do
+  #   ~w(.ogg) |> Enum.member?(Path.extname(file.file_name))
+  # end
 
   def filename(version, _) do
     version
