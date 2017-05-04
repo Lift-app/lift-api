@@ -55,7 +55,7 @@ defmodule Lift.PostController do
         |> render(Lift.ChangesetView, "error.json", changeset: changeset)
     end
   end
-  def create(conn, %{"type" => "text"} = post_params) do
+  def create(conn, post_params) do
     changeset = Post.changeset(%Post{}, post_params)
 
     case Repo.insert(changeset) do
