@@ -19,7 +19,8 @@ defmodule Lift.Mixfile do
   def application do
     [mod: {Lift, []},
      applications: [:phoenix, :phoenix_pubsub, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :scrivener_ecto, :comeonin]]
+                    :phoenix_ecto, :postgrex, :scrivener_ecto, :comeonin,
+                    :redix]]
   end
 
   # Specifies which paths to compile per environment.
@@ -43,7 +44,8 @@ defmodule Lift.Mixfile do
      {:ex_machina, "~> 2.0", only: :test},
      {:scrivener_ecto, "~> 1.0"},
      {:guardian, "~> 0.14"},
-     {:comeonin, "~> 3.0"}]
+     {:comeonin, "~> 3.0"},
+     {:redix, ">= 0.0.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

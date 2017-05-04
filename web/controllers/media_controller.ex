@@ -3,6 +3,8 @@ defmodule Lift.MediaController do
 
   alias Lift.{Audio, Avatar, Post, Comment, User}
 
+  plug Lift.UploadAuthPlug, handler: Lift.TokenController
+
   def post(conn, %{"id" => id}) do
     post = from(p in Post, where: p.id == ^id and p.type == "audio") |> Repo.one!
     audio_path = Audio.url({"#{id}.ogg", post})

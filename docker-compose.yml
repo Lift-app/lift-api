@@ -11,11 +11,13 @@ services:
     - 4000:4000
     links:
     - postgres
+    - redis
     environment:
     - MIX_ENV=prod
     - PORT=4000
-    - POSTGRES_HOST=postgres
     - STORAGE_DIR=/uploads
+    - POSTGRES_HOST=postgres
+    - REDIS_HOST=redis
 
   postgres:
     image: postgres:9.6.2
@@ -23,3 +25,6 @@ services:
     - /data/postgres:/var/lib/postgresql/data
     environment:
     - POSTGRES_DB=lift_prod
+
+  redis:
+    image: redis:3.0.7
