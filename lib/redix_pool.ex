@@ -1,13 +1,13 @@
 defmodule Lift.RedixPool do
   use Supervisor
 
-  @redis_connection_params host: Application.get_env(:redix, :host)
-
   def start_link do
     Supervisor.start_link(__MODULE__, [])
   end
 
   def init([]) do
+    redis_connection_params = [host: Application.get_env(:redix, :host)]
+
     pool_opts = [
       name: {:local, :redix_poolboy},
       worker_module: Redix,
@@ -16,7 +16,7 @@ defmodule Lift.RedixPool do
     ]
 
     children = [
-      :poolboy.child_spec(:redix_poolboy, pool_opts, @redis_connection_params)
+      :poolboy.child_spec(:redix_poolboy, pool_opts, redis_connection_params)
     ]
 
     supervise(children, strategy: :one_for_one, name: __MODULE__)
