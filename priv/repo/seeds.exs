@@ -53,6 +53,7 @@ Enum.each(posts, fn question ->
     user_id: 1,
     category_id: Enum.random(1..length(categories)),
     body: question,
+    type: :text,
     locked: Enum.random([true, false, false]),
     anonymous: Enum.random([true, false, false, false])
   })

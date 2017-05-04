@@ -8,7 +8,7 @@ defmodule Lift.Repo.Migrations.CreatePost do
       add :user_id,     references(:users)
       add :category_id, references(:categories)
       add :body,        :text
-      add :type,        :type
+      add :type,        :type, default: "text"
       add :locked,      :boolean, default: false, null: false
       add :anonymous,   :boolean, default: false, null: false
 
