@@ -19,7 +19,7 @@ defmodule Lift.Post do
   end
 
   @required_fields ~w(user_id category_id type)a
-  @optional_fields ~w(body)a
+  @optional_fields ~w(body anonymous)a
 
   def ordered(query) do
     order_by(query, desc: :inserted_at)
