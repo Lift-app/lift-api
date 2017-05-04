@@ -3,8 +3,8 @@ defmodule Lift.PostTest do
 
   alias Lift.Post
 
-  @valid_attrs %{user_id: 1, category_id: 1, body: "some content", locked: true}
-  @invalid_attrs %{}
+  @valid_attrs %{user_id: 1, category_id: 1, body: "some content", locked: true, type: :text}
+  @invalid_attrs %{type: :not_a_type}
 
   test "changeset with valid attributes" do
     changeset = Post.changeset(%Post{}, @valid_attrs)

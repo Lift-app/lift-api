@@ -3,6 +3,8 @@ services:
   api:
     build: .
     env_file: .env
+    volumes:
+    - /data/uploads:/uploads
     depends_on:
     - postgres
     ports:
@@ -13,6 +15,7 @@ services:
     - MIX_ENV=prod
     - PORT=4000
     - POSTGRES_HOST=postgres
+    - STORAGE_DIR=/uploads
 
   postgres:
     image: postgres:9.6.2

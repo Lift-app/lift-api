@@ -1,5 +1,6 @@
 defmodule Lift.User do
   use Lift.Web, :model
+  use Arc.Ecto.Schema
 
   schema "users" do
     many_to_many :categories, Lift.Category,
@@ -11,6 +12,7 @@ defmodule Lift.User do
     field :password,      :string, virtual: true
     field :password_hash, :string
     field :banned,        :boolean, default: false
+    field :avatar,        Lift.Avatar.Type
 
     timestamps()
   end
@@ -30,6 +32,7 @@ defmodule Lift.User do
     |> constraints
     |> validations
     |> validate_required(@required_fields)
+    |> cast_attachments(params, [:avatar])
     |> hash_password
   end
 

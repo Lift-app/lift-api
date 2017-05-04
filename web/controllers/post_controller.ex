@@ -2,6 +2,7 @@ defmodule Lift.PostController do
   use Lift.Web, :controller
 
   alias Lift.Post
+  alias Lift.Audio
 
   def voorjou(conn, params) do
     # TODO: get authenticated user's interests and filter posts by those categories
@@ -26,7 +27,35 @@ defmodule Lift.PostController do
     render(conn, "index.json", posts: posts)
   end
 
-  def create(conn, post_params) do
+  def create(conn, %{"type" => "audio", "audio" => audio} = post_params) do
+    changeset = Post.changeset(%Post{}, post_params)
+
+    transaction = Repo.transaction(fn ->
+      post = Repo.insert!(changeset)
+
+      case Audio.store({audio, post}) do
+        {:ok, _filename} -> post
+        {:error, _error} -> Repo.rollback(:bad_audio)
+      end
+    end)
+
+    case transaction do
+      {:ok, post} ->
+        conn
+        |> put_status(:created)
+        |> put_resp_header("location", post_path(conn, :show, post))
+        |> render("show.json", post: Repo.preload(post, [:category, :user]))
+      {:error, :bad_audio} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{"errors": "Invalid audio file"})
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Lift.ChangesetView, "error.json", changeset: changeset)
+    end
+  end
+  def create(conn, %{"type" => "text"} = post_params) do
     changeset = Post.changeset(%Post{}, post_params)
 
     case Repo.insert(changeset) do

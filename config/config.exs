@@ -9,6 +9,10 @@ use Mix.Config
 config :lift,
   ecto_repos: [Lift.Repo]
 
+config :arc,
+  storage: Arc.Storage.Local,
+  storage_dir: System.get_env("STORAGE_DIR") || "#{Path.absname(".")}/web/uploads/"
+
 # Configures the endpoint
 config :lift, Lift.Endpoint,
   url: [host: "localhost"],

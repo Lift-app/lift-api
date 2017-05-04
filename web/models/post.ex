@@ -1,5 +1,6 @@
 defmodule Lift.Post do
   use Lift.Web, :model
+  use Arc.Ecto.Schema
 
   schema "posts" do
     belongs_to :user,     Lift.User
@@ -8,6 +9,7 @@ defmodule Lift.Post do
     has_many   :likes,    Lift.Like
 
     field :body,       :string
+    field :type,       TypeEnum
     field :locked,     :boolean, default: false
     field :anonymous,  :boolean, default: false
     field :like_count, :integer, default: 0, virtual: true
@@ -15,7 +17,8 @@ defmodule Lift.Post do
     timestamps()
   end
 
-  @required_fields ~w(user_id category_id body)a
+  @required_fields ~w(user_id category_id type)a
+  @optional_fields ~w(body)a
 
   def ordered(query) do
     order_by(query, desc: :inserted_at)
@@ -26,10 +29,6 @@ defmodule Lift.Post do
   end
 
   def with_likes(query) do
-    # select count(likes.id) as likes, posts.*
-    #   from posts
-    #   left join likes on (likes.post_id = posts.id) where posts.id=1
-    #   group by posts.id
     from p in query,
       left_join: l in assoc(p, :likes),
       select: %{p | like_count: count(l.id)},
@@ -41,13 +40,24 @@ defmodule Lift.Post do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, @required_fields)
+    |> cast(params, @required_fields ++ @optional_fields)
     |> constraints
+    |> validate_body_present
     |> validate_required(@required_fields)
   end
 
   defp constraints(struct) do
     struct
     |> unique_constraint(:name)
+  end
+
+  defp validate_body_present(struct) do
+    type = get_field(struct, :type)
+
+    if type == :text and (get_field(struct, :body) in [nil, ""]) do
+      add_error(struct, :body, "missing body")
+    else
+      struct
+    end
   end
 end
