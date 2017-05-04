@@ -31,8 +31,8 @@ defmodule Lift.User do
     |> cast(params, @required_fields)
     |> constraints
     |> validations
-    |> cast_attachments(params, [:avatar])
     |> validate_required(@required_fields)
+    |> cast_attachments(params, [:avatar])
     |> hash_password
   end
 

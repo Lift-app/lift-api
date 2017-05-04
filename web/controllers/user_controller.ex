@@ -31,9 +31,9 @@ defmodule Lift.UserController do
     end
   end
 
-  def update(conn, %{"id" => id, "user" => params}) do
-    changeset = Repo.get(User, id) |> User.changeset(params)
-    IO.inspect {changeset, params}
+  def update(conn, user_params, user, _claims) do
+    changeset = Repo.get(User, user.id) |> User.changeset(user_params)
+
     case Repo.update(changeset) do
       {:ok, user} ->
         conn
@@ -43,9 +43,5 @@ defmodule Lift.UserController do
         |> put_status(:unprocessable_entity)
         |> render(Lift.ChangesetView, "error.json", changeset: changeset)
     end
-  end
-
-  def avatar(conn, %{"id" => id}) do
-    :ok
   end
 end

@@ -3,6 +3,8 @@ services:
   api:
     build: .
     env_file: .env
+    volumes:
+    - /data/uploads:/uploads
     depends_on:
     - postgres
     ports:

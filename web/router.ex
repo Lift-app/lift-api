@@ -16,7 +16,7 @@ defmodule Lift.Router do
     resources "/tokens", TokenController, only: [:create, :delete]
 
     scope "/user" do
-      resources "/", UserController, only: [:show], singleton: true
+      resources "/", UserController, only: [:show, :update], singleton: true
 
       put "/interests", UserController, :update_interests
     end
