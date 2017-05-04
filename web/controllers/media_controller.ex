@@ -7,7 +7,7 @@ defmodule Lift.MediaController do
 
   def post(conn, %{"id" => id}) do
     post = from(p in Post, where: p.id == ^id and p.type == "audio") |> Repo.one!
-    audio_path = Audio.url({"#{id}", post})
+    audio_path = Audio.url({"#{id}.ogg", post})
 
     conn
     |> put_resp_content_type("audio/ogg")
@@ -16,7 +16,7 @@ defmodule Lift.MediaController do
 
   def comment(conn, %{"id" => id}) do
     comment = from(c in Comment, where: c.id == ^id and c.type == "audio") |> Repo.one!
-    audio_path = Audio.url({"#{id}", comment})
+    audio_path = Audio.url({"#{id}.ogg", comment})
 
     conn
     |> put_resp_content_type("audio/ogg")

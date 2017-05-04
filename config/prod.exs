@@ -13,7 +13,7 @@ use Mix.Config
 # which you typically run after static files are built.
 config :lift, Lift.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: "api.liftapp.nl", port: 4000]
+  url: [host: "api.liftapp.nl", port: 443, scheme: "https"]
 
 # Do not print debug messages in production
 config :logger, level: :info
