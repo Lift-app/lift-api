@@ -1,19 +1,19 @@
 defmodule Lift.UploadAuth do
   alias Lift.RedixPool, as: Redix
 
-  @set_name "upload_tokens"
+  @namespace "upload_tokens"
 
   def generate_unique_token do
     token = random_string()
-    Redix.command(~w(SADD #{@set_name} #{token}))
+    Redix.command(["SET", "#{@namespace}:#{token}", "", "EX", 20])
 
     token
   end
 
   def verify_token(token \\ "") do
-    case Redix.command(~w(SISMEMBER #{@set_name} #{token})) do
+    case Redix.command(~w(EXISTS #{@namespace}:#{token})) do
       {:ok, 1} ->
-        Redix.command(~w(SREM #{@set_name} #{token}))
+        Redix.command(~w(DEL #{@namespace}:#{token}))
         :ok
       _ -> {:error, "Token not found"}
     end
