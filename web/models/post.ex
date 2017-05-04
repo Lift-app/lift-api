@@ -18,6 +18,7 @@ defmodule Lift.Post do
   end
 
   @required_fields ~w(user_id category_id type)a
+  @optional_fields ~w(body)a
 
   def ordered(query) do
     order_by(query, desc: :inserted_at)
@@ -39,13 +40,24 @@ defmodule Lift.Post do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, @required_fields)
+    |> cast(params, @required_fields ++ @optional_fields)
     |> constraints
+    |> validate_body_present
     |> validate_required(@required_fields)
   end
 
   defp constraints(struct) do
     struct
     |> unique_constraint(:name)
+  end
+
+  defp validate_body_present(struct) do
+    type = get_field(struct, :type)
+
+    if type == :text and (get_field(struct, :body) in [nil, ""]) do
+      add_error(struct, :body, "missing body")
+    else
+      struct
+    end
   end
 end
