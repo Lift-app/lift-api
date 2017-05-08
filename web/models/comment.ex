@@ -15,7 +15,7 @@ defmodule Lift.Comment do
     timestamps()
   end
 
-  @required_fields ~w(user_id post_id body)a
+  @required_fields ~w(post_id body)a
   @optional_fields ~w(parent_id)a
 
   def with_associations(query) do

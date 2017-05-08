@@ -5,7 +5,7 @@ defmodule Lift.CommentController do
 
   plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
-  def index(conn, %{"id" => post_id}) do
+  def index(conn, %{"post_id" => post_id}) do
     post = Repo.get!(Post, post_id)
     comments =
       assoc(post, :comments)
@@ -16,14 +16,15 @@ defmodule Lift.CommentController do
     render(conn, "index.json", comments: comments)
   end
 
-  def create(conn, post_params) do
-    changeset = Comment.changeset(%Comment{}, post_params)
+  def create(conn, comment_params) do
+    user = Guardian.Plug.current_resource(conn)
+    changeset =
+      Comment.changeset(%Comment{}, comment_params) |> Ecto.Changeset.put_assoc(:user, user)
 
     case Repo.insert(changeset) do
       {:ok, comment} ->
         conn
         |> put_status(:created)
-        |> put_resp_header("location", comment_path(conn, :show, comment))
         |> render("show.json", comment: Repo.preload(comment, [:user]))
       {:error, changeset} ->
         conn

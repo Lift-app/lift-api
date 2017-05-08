@@ -13,10 +13,11 @@ defmodule Lift.CommentControllerTest do
     assert json_response(conn, 200) == render_json("index.json", comments: [comment])
   end
 
-  test "POST /comments creates a comment", %{conn: conn} do
-    comment = params_with_assocs(:comment)
+  test "POST /posts/:id/comments creates a comment", %{conn: conn} do
+    post = insert(:post)
+    comment = params_with_assocs(:comment, post: post)
 
-    conn = post(conn, comment_path(conn, :create, comment))
+    conn = post(conn, comment_path(conn, :create, post), comment)
 
     assert json_response(conn, 201)
   end

@@ -30,8 +30,9 @@ defmodule Lift.PostController do
     render(conn, "index.json", posts: posts)
   end
 
-  def create(conn, %{"type" => "audio", "audio" => audio} = post_params, _user, _claims) do
-    changeset = Post.changeset(%Post{}, post_params)
+  def create(conn, %{"type" => "audio", "audio" => audio} = post_params, user, _claims) do
+    changeset =
+      Post.changeset(%Post{}, post_params) |> Ecto.Changeset.put_assoc(:user, user)
 
     transaction = Repo.transaction(fn ->
       post = Repo.insert!(changeset)
@@ -58,8 +59,9 @@ defmodule Lift.PostController do
         |> render(Lift.ChangesetView, "error.json", changeset: changeset)
     end
   end
-  def create(conn, post_params, _user, _claims) do
-    changeset = Post.changeset(%Post{}, post_params)
+  def create(conn, post_params, user, _claims) do
+    changeset =
+      Post.changeset(%Post{}, post_params) |> Ecto.Changeset.put_assoc(:user, user)
 
     case Repo.insert(changeset) do
       {:ok, post} ->

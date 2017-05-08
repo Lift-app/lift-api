@@ -18,7 +18,7 @@ defmodule Lift.Post do
     timestamps()
   end
 
-  @required_fields ~w(user_id category_id type)a
+  @required_fields ~w(category_id type)a
   @optional_fields ~w(body anonymous)a
 
   def ordered(query) do

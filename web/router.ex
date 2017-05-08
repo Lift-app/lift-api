@@ -29,14 +29,14 @@ defmodule Lift.Router do
     scope "/posts" do
       resources "/", PostController, except: [:new, :edit]
 
-      get "/:id/comments", CommentController, :index
+      resources "/:post_id/comments", CommentController, only: [:index, :create]
 
       put "/:id/like", LikeController, :like
       put "/:id/unlike", LikeController, :unlike
     end
 
     scope "/comments" do
-      resources "/", CommentController, except: [:new, :edit, :index]
+      resources "/", CommentController, only: [:delete, :update, :show]
 
       put "/:id/like", LikeController, :like
       put "/:id/unlike", LikeController, :unlike

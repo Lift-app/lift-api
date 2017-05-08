@@ -19,7 +19,7 @@ defmodule Lift.Factory do
 
   def post_factory do
     %Lift.Post{
-      user: build(:user),
+      user: %Lift.User{},
       category: build(:category),
       body: "Test post",
       type: :text

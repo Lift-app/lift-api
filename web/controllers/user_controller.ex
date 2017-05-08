@@ -2,7 +2,7 @@ defmodule Lift.UserController do
   use Lift.Web, :controller
   use Guardian.Phoenix.Controller
 
-  alias Lift.{Category, CategoryView}
+  alias Lift.{User, Category, CategoryView}
 
   plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
@@ -35,7 +35,7 @@ defmodule Lift.UserController do
     changeset = Repo.get(User, user.id) |> User.changeset(user_params)
 
     case Repo.update(changeset) do
-      {:ok, user} ->
+      {:ok, _user} ->
         conn
         |> send_resp(:no_content, "")
       {:error, changeset} ->
