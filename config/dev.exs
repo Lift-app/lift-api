@@ -13,7 +13,6 @@ config :lift, Lift.Endpoint,
   check_origin: false,
   watchers: []
 
-
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 
@@ -29,3 +28,8 @@ config :lift, Lift.Repo,
   database: "lift_dev",
   hostname: "localhost",
   pool_size: 10
+
+config :lift, Lift.OAuthGoogle,
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
+  client_id:     System.get_env("GOOGLE_CLIENT_ID"),
+  redirect_uri:  System.get_env("GOOGLE_REDIRECT_URI")

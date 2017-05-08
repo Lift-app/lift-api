@@ -2,7 +2,13 @@ defmodule Lift.UserController do
   use Lift.Web, :controller
   use Guardian.Phoenix.Controller
 
+<<<<<<< 3726d9c9fd3ba2315e8afef7c107896dd13e9ff1
   alias Lift.{User, Category, CategoryView}
+||||||| merged common ancestors
+  alias Lift.{Category, CategoryView}
+=======
+  alias Lift.{Category, CategoryView, User}
+>>>>>>> First draft of OAuth2 implementation
 
   plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 

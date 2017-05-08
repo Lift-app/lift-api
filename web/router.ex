@@ -47,5 +47,11 @@ defmodule Lift.Router do
       get "/comments/:id", MediaController, :comment
       get "/avatars/:id", MediaController, :avatar
     end
+
+    scope "/auth" do
+      get "/:provider", OAuthController, :index
+      get "/:provider/callback", OAuthController, :callback
+      delete "/logout", OAuthController, :delete
+    end
   end
 end
