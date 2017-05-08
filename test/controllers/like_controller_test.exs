@@ -1,15 +1,18 @@
 defmodule Lift.LikeControllerTest do
   use Lift.ConnCase
 
-  alias Lift.Auth
-
   setup do
     user = insert(:user)
     post = insert(:post, user: user)
-    token = Auth.generate_token(user)
-    conn = build_conn() |> put_req_header("authorization", "bearer " <> token)
 
-    {:ok, conn: conn, user: user, post: post}
+    {:ok, conn: authenticated_conn(user), user: user, post: post}
+  end
+
+  test "routes require authentication", context do
+    conn = build_conn()
+
+    assert put(conn, "/posts/#{context.post.id}/like") |> json_response(401)
+    assert put(conn, "/posts/#{context.post.id}/unlike") |> json_response(401)
   end
 
   test "PUT /posts/:id/like likes a post", %{conn: conn} = context do

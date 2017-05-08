@@ -2,7 +2,15 @@ defmodule Lift.PostControllerTest do
   use Lift.ConnCase
 
   setup do
-    {:ok, conn: build_conn()}
+    {:ok, conn: authenticated_conn()}
+  end
+
+  test "routes require authentication" do
+    conn = build_conn()
+
+    assert get(conn, post_path(conn, :index)) |> json_response(401)
+    assert get(conn, post_path(conn, :show, 1)) |> json_response(401)
+    assert post(conn, post_path(conn, :create, %{})) |> json_response(401)
   end
 
   test "GET /posts renders a list of posts", %{conn: conn} do

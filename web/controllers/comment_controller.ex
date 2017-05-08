@@ -3,6 +3,8 @@ defmodule Lift.CommentController do
 
   alias Lift.{Comment, Post}
 
+  plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
+
   def index(conn, %{"id" => post_id}) do
     post = Repo.get!(Post, post_id)
     comments =

@@ -1,10 +1,13 @@
 defmodule Lift.PostController do
   use Lift.Web, :controller
+  use Guardian.Phoenix.Controller
 
   alias Lift.Post
   alias Lift.Audio
 
-  def voorjou(conn, params) do
+  plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
+
+  def voorjou(conn, params, user, _claims) do
     # TODO: get authenticated user's interests and filter posts by those categories
     posts =
       Post
@@ -16,7 +19,7 @@ defmodule Lift.PostController do
     render(conn, "index.json", posts: posts)
   end
 
-  def index(conn, params) do
+  def index(conn, params, _user, _claims) do
     posts =
       Post
       |> Post.ordered
@@ -27,7 +30,7 @@ defmodule Lift.PostController do
     render(conn, "index.json", posts: posts)
   end
 
-  def create(conn, %{"type" => "audio", "audio" => audio} = post_params) do
+  def create(conn, %{"type" => "audio", "audio" => audio} = post_params, _user, _claims) do
     changeset = Post.changeset(%Post{}, post_params)
 
     transaction = Repo.transaction(fn ->
@@ -55,7 +58,7 @@ defmodule Lift.PostController do
         |> render(Lift.ChangesetView, "error.json", changeset: changeset)
     end
   end
-  def create(conn, post_params) do
+  def create(conn, post_params, _user, _claims) do
     changeset = Post.changeset(%Post{}, post_params)
 
     case Repo.insert(changeset) do
@@ -71,7 +74,7 @@ defmodule Lift.PostController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"id" => id}, _user, _claims) do
     post =
       Post
       |> Post.with_associations
@@ -81,7 +84,7 @@ defmodule Lift.PostController do
     render(conn, "show.json", post: post)
   end
 
-  def update(conn, %{"id" => id, "post" => post_params}) do
+  def update(conn, %{"id" => id, "post" => post_params}, _user, _claims) do
     post = Repo.get!(Post, id)
     changeset = Post.changeset(post, post_params)
 
@@ -95,7 +98,7 @@ defmodule Lift.PostController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
+  def delete(conn, %{"id" => id}, _user, _claims) do
     post = Repo.get!(Post, id)
 
     # Here we use delete! (with a bang) because we expect

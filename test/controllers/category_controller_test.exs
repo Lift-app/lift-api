@@ -2,7 +2,16 @@ defmodule Lift.CategoryControllerTest do
   use Lift.ConnCase
 
   setup do
-    {:ok, conn: build_conn()}
+    {:ok, conn: authenticated_conn()}
+  end
+
+  test "routes require authentication" do
+    conn = build_conn()
+
+    assert get(conn, category_path(conn, :index)) |> json_response(401)
+    assert get(conn, category_path(conn, :show, 1)) |> json_response(401)
+    assert post(conn, category_path(conn, :create, %{})) |> json_response(401)
+    assert get(conn, "/categories/1/posts") |> json_response(401)
   end
 
   test "GET /categories renders a list of categories", %{conn: conn} do

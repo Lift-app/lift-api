@@ -2,7 +2,7 @@ defmodule Lift.CommentControllerTest do
   use Lift.ConnCase
 
   setup do
-    {:ok, conn: build_conn()}
+    {:ok, conn: authenticated_conn()}
   end
 
   test "GET /posts/:id/comments renders a post's comments", %{conn: conn} do
