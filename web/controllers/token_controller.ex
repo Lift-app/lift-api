@@ -7,6 +7,7 @@ defmodule Lift.TokenController do
     conn
     |> put_status(:unauthorized)
     |> json(%{message: "Authorization required"})
+    |> halt
   end
 
   def create(conn, %{"email" => email, "password" => password}) do
