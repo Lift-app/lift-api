@@ -3,6 +3,8 @@ defmodule Lift.CategoryController do
 
   alias Lift.{Category, Post, PostView}
 
+  plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
+
   def index(conn, _params) do
     categories = Repo.all(Category)
     render(conn, "index.json", categories: categories)
