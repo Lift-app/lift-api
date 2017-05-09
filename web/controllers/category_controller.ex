@@ -32,13 +32,14 @@ defmodule Lift.CategoryController do
   end
 
   def posts(conn, %{"category_ids" => category_ids} = params) do
+    user = Guardian.Plug.current_resource(conn)
     categories = String.split(category_ids, ",")
 
     posts =
       Post
       |> Post.ordered
       |> Post.with_associations
-      |> Post.with_likes_and_comments
+      |> Post.with_likes_and_comments(user.id)
       |> where([p], p.category_id in ^categories)
       |> Repo.paginate(params)
 

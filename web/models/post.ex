@@ -14,6 +14,7 @@ defmodule Lift.Post do
     field :anonymous,     :boolean, default: false
     field :like_count,    :integer, default: 0, virtual: true
     field :comment_count, :integer, default: 0, virtual: true
+    field :liked,         :boolean, default: false, virtual: true
 
     timestamps()
   end
@@ -29,11 +30,13 @@ defmodule Lift.Post do
     preload(query, [:user, :category])
   end
 
-  def with_likes_and_comments(query) do
+  def with_likes_and_comments(query, user_id) do
     from p in query,
       left_join: l in assoc(p, :likes),
       left_join: c in assoc(p, :comments),
-      select: %{p | like_count: count(l.id), comment_count: count(c.id)},
+      left_join: ul in assoc(p, :likes), on: ul.user_id == ^user_id,
+      select: %{p | like_count: count(l.id), comment_count: count(c.id),
+                    liked: count(ul.id) == 1},
       group_by: p.id
   end
 

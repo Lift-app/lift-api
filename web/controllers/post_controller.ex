@@ -13,18 +13,18 @@ defmodule Lift.PostController do
       Post
       |> Post.ordered
       |> Post.with_associations
-      |> Post.with_likes_and_comments
+      |> Post.with_likes_and_comments(user.id)
       |> Repo.paginate(params)
 
     render(conn, "index.json", posts: posts)
   end
 
-  def index(conn, params, _user, _claims) do
+  def index(conn, params, user, _claims) do
     posts =
       Post
       |> Post.ordered
       |> Post.with_associations
-      |> Post.with_likes_and_comments
+      |> Post.with_likes_and_comments(user.id)
       |> Repo.paginate(params)
 
     render(conn, "index.json", posts: posts)
@@ -76,11 +76,11 @@ defmodule Lift.PostController do
     end
   end
 
-  def show(conn, %{"id" => id}, _user, _claims) do
+  def show(conn, %{"id" => id}, user, _claims) do
     post =
       Post
       |> Post.with_associations
-      |> Post.with_likes_and_comments
+      |> Post.with_likes_and_comments(user.id)
       |> Repo.get!(id)
 
     render(conn, "show.json", post: post)

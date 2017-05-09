@@ -31,6 +31,7 @@ defmodule Lift.PostView do
       anonymous: post.anonymous,
       likes: post.like_count,
       comments: post.comment_count,
+      liked: post.liked,
 
       created_at: post.inserted_at,
       updated_at: post.updated_at
