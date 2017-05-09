@@ -20,7 +20,7 @@ defmodule Lift.User do
   @required_fields ~w(username email password)a
 
   def find_by_email(email) do
-    from u in __MODULE__, where: u.email == ^email
+    from u in __MODULE__, where: ilike(u.email, ^email)
   end
 
   @doc """
