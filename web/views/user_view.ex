@@ -12,23 +12,20 @@ defmodule Lift.UserView do
   end
 
   def render("user.json", %{user: user}) do
-    avatar = user_avatar(user)
-
     %{
       id: user.id,
       username: user.username,
-      avatar: avatar
+      avatar: user_avatar(user)
     }
   end
 
   def render("authenticated_user.json", %{user: user}) do
-    avatar = user_avatar(user)
     %{
       id: user.id,
       username: user.username,
       email: user.email,
       interests: render_many(user.categories, Lift.CategoryView, "category.json"),
-      avatar: avatar,
+      avatar: user_avatar(user),
 
       created_at: user.inserted_at,
       updated_at: user.updated_at,
