@@ -12,23 +12,17 @@ defmodule Lift.UserView do
   end
 
   def render("user.json", %{user: user}) do
-    Map.take(user, [:id, :username])
+    avatar = user_avatar(user)
+
+    %{
+      id: user.id,
+      username: user.username,
+      avatar: avatar
+    }
   end
 
   def render("authenticated_user.json", %{user: user}) do
-    avatar =
-      if user.avatar do
-        token = UploadAuth.generate_unique_token()
-        url = "#{Lift.Endpoint.url}/media/avatars/#{user.id}?token=#{token}"
-
-        %{
-          original: url,
-          thumbnail: "#{url}&thumb"
-        }
-      else
-        nil
-      end
-
+    avatar = user_avatar(user)
     %{
       id: user.id,
       username: user.username,
@@ -38,6 +32,17 @@ defmodule Lift.UserView do
 
       created_at: user.inserted_at,
       updated_at: user.updated_at,
+    }
+  end
+
+  defp user_avatar(%{avatar: nil}), do: nil
+  defp user_avatar(user) do
+    token = UploadAuth.generate_unique_token()
+    url = "#{Lift.Endpoint.url}/media/avatars/#{user.id}?token=#{token}"
+
+    %{
+      original: url,
+      thumbnail: "#{url}&thumb"
     }
   end
 end
