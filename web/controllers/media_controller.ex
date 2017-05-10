@@ -23,9 +23,10 @@ defmodule Lift.MediaController do
     |> Plug.Conn.send_file(200, audio_path)
   end
 
-  def avatar(conn, %{"id" => id}) do
+  def avatar(conn, %{"id" => id} = params) do
     user = from(u in User, where: u.id == ^id and not is_nil(u.avatar)) |> Repo.one!
-    image_path = Avatar.url({"#{id}.png", user})
+    version = if Map.has_key?(params, "thumb"), do: :thumb, else: :original
+    image_path = Avatar.url({"#{id}.png", user}, version)
 
     conn
     |> put_resp_content_type("image/png")

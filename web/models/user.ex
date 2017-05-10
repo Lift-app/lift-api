@@ -17,7 +17,7 @@ defmodule Lift.User do
     timestamps()
   end
 
-  @required_fields ~w(username email password)a
+  @required_fields ~w(username email)a
 
   def find_by_email(email) do
     from u in __MODULE__, where: ilike(u.email, ^email)
