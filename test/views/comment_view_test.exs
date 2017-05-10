@@ -36,7 +36,8 @@ defmodule Lift.CommentViewTest do
       parent_id: comment.parent_id,
       user: %{
         id: comment.user.id,
-        username: comment.user.username
+        username: comment.user.username,
+        avatar: nil
       },
       body: comment.body,
       deleted: comment.deleted,

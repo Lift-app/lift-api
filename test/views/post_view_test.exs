@@ -44,7 +44,11 @@ defmodule Lift.PostViewTest do
         name: post.category.name,
         description: post.category.description
       },
-      user: %{ id: post.user.id, username: post.user.username },
+      user: %{
+        id: post.user.id,
+        username: post.user.username,
+        avatar: nil
+      },
       created_at: post.inserted_at,
       updated_at: post.updated_at
     }
