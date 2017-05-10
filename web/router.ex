@@ -16,7 +16,7 @@ defmodule Lift.Router do
     resources "/tokens", TokenController, only: [:create, :delete]
 
     scope "/users/me" do
-      get "/", UserController, :show
+      resources "/", UserController, only: [:show, :update], singleton: true
       put "/interests", UserController, :update_interests
     end
 
@@ -45,7 +45,7 @@ defmodule Lift.Router do
     scope "/media" do
       get "/posts/:id", MediaController, :post
       get "/comments/:id", MediaController, :comment
-      get "/avatar/:id", MediaController, :avatar
+      get "/avatars/:id", MediaController, :avatar
     end
   end
 end

@@ -32,7 +32,7 @@ defmodule Lift.UserController do
   end
 
   def update(conn, user_params, user, _claims) do
-    changeset = Repo.get(User, user.id) |> User.changeset(user_params)
+    changeset = user |> User.changeset(user_params)
 
     case Repo.update(changeset) do
       {:ok, _user} ->

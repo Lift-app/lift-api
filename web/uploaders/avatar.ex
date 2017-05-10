@@ -14,7 +14,7 @@ defmodule Lift.Avatar do
 
   # Define a thumbnail transformation:
   def transform(:thumb, _) do
-    {:convert, "-strip -thumbnail 250x250^ -gravity center -extent 250x250 -format png", :png}
+    {:convert, "-strip -thumbnail 60x60^ -extent 60x60 -format png", :png}
   end
 
   def filename(version, _) do
