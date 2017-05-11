@@ -43,6 +43,11 @@ config :redix,
 config :oauth2,
   debug: true
 
+config :lift, Lift.Google,
+  client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
+  client_id:     System.get_env("GOOGLE_CLIENT_ID"),
+  redirect_uri:  System.get_env("GOOGLE_REDIRECT_URI")
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
