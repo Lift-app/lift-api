@@ -19,19 +19,47 @@ Enum.each(categories, fn category ->
 end)
 
 # Users
-all_categories = Repo.all(Category)
-user = Repo.insert!(User.changeset(%User{}, %{
-  username: "steve",
-  email: "steve@gmail.com",
-  password: "foo123"
-}))
+users = [
+  %{
+    username: "steve",
+    email: "steve@gmail.com",
+    password: "foo123",
+  },
+  %{
+    username: "mclatte",
+    email: "mclatte@gmail.com",
+    password: "foo123",
+  },
+  %{
+    username: "teun",
+    email: "teun@gmail.com",
+    password: "foo123",
+  },
+  %{
+    username: "mirko",
+    email: "mirko@gmail.com",
+    password: "foo123",
+  },
+  %{
+    username: "rene",
+    email: "rene@gmail.com",
+    password: "foo123",
+  }
+]
+Enum.each(users, fn user ->
+  Repo.insert!(User.changeset(%User{}, user))
+end)
 
 # Interests
-user
-|> Repo.preload([:categories])
-|> Ecto.Changeset.change
-|> Ecto.Changeset.put_assoc(:categories, Enum.take_random(all_categories, 3))
-|> Repo.update!
+all_categories = Repo.all(Category)
+all_users = Repo.all(User)
+Enum.each(all_users, fn user ->
+  user
+  |> Repo.preload([:categories])
+  |> Ecto.Changeset.change
+  |> Ecto.Changeset.put_assoc(:categories, Enum.take_random(all_categories, 3))
+  |> Repo.update!
+end)
 
 # Posts
 posts = [
