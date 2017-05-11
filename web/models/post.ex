@@ -36,7 +36,7 @@ defmodule Lift.Post do
       left_join: c in assoc(p, :comments),
       left_join: ul in assoc(p, :likes), on: ul.user_id == ^user_id,
       select: %{p | like_count: count(l.id), comment_count: count(c.id),
-                    liked: count(ul.id) == 1},
+                    liked: count(ul.id) != 0},
       group_by: p.id
   end
 
