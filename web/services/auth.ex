@@ -1,5 +1,4 @@
 defmodule Lift.Auth do
-
   alias Lift.{Repo, User}
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
