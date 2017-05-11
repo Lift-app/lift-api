@@ -42,7 +42,7 @@ defmodule Lift.CommentViewTest do
       body: comment.body,
       deleted: comment.deleted,
       anonymous: comment.anonymous,
-      likes: comment.like_count,
+      like_count: comment.like_count,
 
       created_at: comment.inserted_at,
       updated_at: comment.updated_at

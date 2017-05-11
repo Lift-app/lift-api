@@ -29,8 +29,8 @@ defmodule Lift.PostView do
       body: body,
       locked: post.locked,
       anonymous: post.anonymous,
-      likes: post.like_count,
-      comments: post.comment_count,
+      like_count: post.like_count,
+      comment_count: post.comment_count,
       liked: post.liked,
 
       created_at: post.inserted_at,
