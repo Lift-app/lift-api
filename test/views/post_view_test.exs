@@ -2,6 +2,7 @@ defmodule Lift.PostViewTest do
   use Lift.ConnCase, async: true
 
   import Lift.Factory
+  import Lift.DateHelpers
 
   alias Lift.PostView
 
@@ -49,8 +50,9 @@ defmodule Lift.PostViewTest do
         username: post.user.username,
         avatar: nil
       },
-      created_at: post.inserted_at,
-      updated_at: post.updated_at
+
+      created_at: local_date(post.inserted_at),
+      updated_at: local_date(post.updated_at)
     }
   end
 end

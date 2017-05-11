@@ -2,6 +2,7 @@ defmodule Lift.CommentViewTest do
   use Lift.ConnCase, async: true
 
   import Lift.Factory
+  import Lift.DateHelpers
 
   alias Lift.CommentView
 
@@ -44,8 +45,8 @@ defmodule Lift.CommentViewTest do
       anonymous: comment.anonymous,
       like_count: comment.like_count,
 
-      created_at: comment.inserted_at,
-      updated_at: comment.updated_at
+      created_at: local_date(comment.inserted_at),
+      updated_at: local_date(comment.updated_at)
     }
   end
 end

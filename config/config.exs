@@ -7,7 +7,8 @@ use Mix.Config
 
 # General application configuration
 config :lift,
-  ecto_repos: [Lift.Repo]
+  ecto_repos: [Lift.Repo],
+  timezone: "Europe/Amsterdam"
 
 config :arc,
   storage: Arc.Storage.Local,

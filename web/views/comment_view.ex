@@ -1,6 +1,8 @@
 defmodule Lift.CommentView do
   use Lift.Web, :view
 
+  import Lift.DateHelpers
+
   def render("index.json", %{comments: comments}) do
     %{data: render_many(comments, Lift.CommentView, "comment.json")}
   end
@@ -25,8 +27,8 @@ defmodule Lift.CommentView do
       anonymous: comment.anonymous,
       like_count: comment.like_count,
 
-      created_at: comment.inserted_at,
-      updated_at: comment.updated_at
+      created_at: local_date(comment.inserted_at),
+      updated_at: local_date(comment.updated_at)
     }
   end
 end

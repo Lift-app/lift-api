@@ -1,6 +1,8 @@
 defmodule Lift.PostView do
   use Lift.Web, :view
 
+  import Lift.DateHelpers
+
   alias Lift.UploadAuth
 
   def render("index.json", %{posts: posts}) do
@@ -33,8 +35,8 @@ defmodule Lift.PostView do
       comment_count: post.comment_count,
       liked: post.liked,
 
-      created_at: post.inserted_at,
-      updated_at: post.updated_at
+      created_at: local_date(post.inserted_at),
+      updated_at: local_date(post.updated_at)
     }
   end
 end
