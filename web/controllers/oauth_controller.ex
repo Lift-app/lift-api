@@ -4,10 +4,6 @@ defmodule Lift.OAuthController do
   alias Lift.{User, Auth, Google}
 
   # Private
-  defp fetch_user(body) do
-    Repo.get_by(User, email: body["email"])
-  end
-
   defp populate_user!(user) do
     username =
       fn length ->
@@ -53,7 +49,7 @@ defmodule Lift.OAuthController do
   def callback(conn, %{"provider" => provider, "code" => code}) do
     client = fetch_token!(provider, code)
     body = fetch_body!(provider, client)
-    user = fetch_user(body)
+    user = User.find_by_email(body["email"]) |> Repo.one
     user =
       case user do
         %User{username: nil} ->

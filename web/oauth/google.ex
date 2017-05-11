@@ -13,7 +13,6 @@ defmodule Lift.Google do
      token_url: "/o/oauth2/token"]
   end
 
-
   @doc """
   Public API, builds a new OAuth2.Client struct using the provided options.
   """

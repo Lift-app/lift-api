@@ -21,7 +21,7 @@ defmodule Lift.User do
   @optional_fields ~w(password)a
   @required_oauth_fields ~w(email)a
 
-  def find_by_email(email) do
+  def find_by_email(email \\ "") do
     from u in __MODULE__, where: ilike(u.email, ^email)
   end
 
