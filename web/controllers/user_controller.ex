@@ -4,11 +4,27 @@ defmodule Lift.UserController do
 
   alias Lift.{User, Category, CategoryView}
 
-  plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
+  plug Guardian.Plug.EnsureAuthenticated, [handler: Lift.TokenController]
+    when action != :create
 
   def show(conn, _params, user, _claims) do
     user = Repo.preload(user, [:categories])
     render(conn, "authenticated_user.json", user: user)
+  end
+
+  def create(conn, user_params, _user, _claims) do
+    changeset = User.changeset(%User{}, user_params)
+
+    case Repo.insert(changeset) do
+      {:ok, user} ->
+        conn
+        |> put_status(:created)
+        |> render("authenticated_user.json", user: Repo.preload(user, [:categories]))
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Lift.ChangesetView, "error.json", changeset: changeset)
+    end
   end
 
   def update_interests(conn, %{"interest_ids" => interest_ids}, user, _claims) do
@@ -32,7 +48,7 @@ defmodule Lift.UserController do
   end
 
   def update(conn, user_params, user, _claims) do
-    changeset = Repo.get(User, user.id) |> User.changeset(user_params)
+    changeset = User.changeset(user, user_params)
 
     case Repo.update(changeset) do
       {:ok, _user} ->

@@ -15,9 +15,13 @@ defmodule Lift.Router do
 
     resources "/tokens", TokenController, only: [:create, :delete]
 
-    scope "/users/me" do
-      get "/", UserController, :show
-      put "/interests", UserController, :update_interests
+    scope "/users" do
+      post "/", UserController, :create
+
+      scope "/me" do
+        get "/", UserController, :show
+        put "/interests", UserController, :update_interests
+      end
     end
 
     scope "/categories" do
