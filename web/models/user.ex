@@ -18,6 +18,7 @@ defmodule Lift.User do
   end
 
   @required_fields ~w(username email)a
+  @optional_fields ~w(password)a
 
   def find_by_email(email) do
     from u in __MODULE__, where: ilike(u.email, ^email)
@@ -28,7 +29,7 @@ defmodule Lift.User do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, @required_fields)
+    |> cast(params, @required_fields ++ @optional_fields)
     |> constraints
     |> validations
     |> validate_required(@required_fields)
