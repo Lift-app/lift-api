@@ -117,32 +117,3 @@ Enum.each(replies, fn reply ->
     body: reply
   })
 end)
-
-# Likes
-Enum.each(1..length(posts), fn id ->
-  post = Repo.get(Post, id)
-
-  case Enum.random([true, false]) do
-    true ->
-      Repo.insert!(%Like{
-        user_id: 1,
-        post_id: post.id
-      })
-    false ->
-      :ok
-  end
-end)
-
-Enum.each(1..length(comments), fn id ->
-  comment = Repo.get(Comment, id)
-
-  case Enum.random([true, false]) do
-    true ->
-      Repo.insert!(%Like{
-        user_id: 1,
-        comment_id: comment.id
-      })
-    false ->
-      :ok
-  end
-end)
