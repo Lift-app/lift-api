@@ -1,24 +1,24 @@
 defmodule Lift.CommentController do
   use Lift.Web, :controller
+  use Guardian.Phoenix.Controller
 
   alias Lift.{Comment, Post, Audio}
 
   plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
-  def index(conn, %{"post_id" => post_id}) do
+  def index(conn, %{"post_id" => post_id}, user, _claims) do
     post = Repo.get!(Post, post_id)
     comments =
       assoc(post, :comments)
       |> Comment.with_associations
-      |> Comment.with_likes
+      |> Comment.with_likes(user.id)
       |> Repo.all
 
     render(conn, "index.json", comments: comments)
   end
 
-  def create(conn, %{"type" => "audio"} = comment_params) do
+  def create(conn, %{"type" => "audio"} = comment_params, user, _claims) do
     audio = Map.get(comment_params, "audio", "")
-    user = Guardian.Plug.current_resource(conn)
     changeset =
       Comment.changeset(%Comment{}, comment_params)
       |> Ecto.Changeset.put_assoc(:user, user)
@@ -48,8 +48,7 @@ defmodule Lift.CommentController do
         |> render(Lift.ChangesetView, "error.json", changeset: changeset)
     end
   end
-  def create(conn, comment_params) do
-    user = Guardian.Plug.current_resource(conn)
+  def create(conn, comment_params, user, _claims) do
     changeset =
       Comment.changeset(%Comment{}, comment_params) |> Ecto.Changeset.put_assoc(:user, user)
 
@@ -65,18 +64,18 @@ defmodule Lift.CommentController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"id" => id}, user, _claims) do
     comment =
       Comment
       |> where([c], c.id == ^id)
       |> preload([:user])
-      |> Comment.with_likes
+      |> Comment.with_likes(user.id)
       |> Repo.one!
 
     render(conn, "show.json", comment: comment)
   end
 
-  def update(conn, %{"id" => id, "comment" => comment_params}) do
+  def update(conn, %{"id" => id, "comment" => comment_params}, _user, _claims) do
     comment = Repo.get!(Comment, id)
     changeset = Comment.changeset(comment, comment_params)
 
@@ -90,7 +89,7 @@ defmodule Lift.CommentController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
+  def delete(conn, %{"id" => id}, _user, _claims) do
     comment = Repo.get!(Comment, id)
     changeset = Comment.changeset(comment, %{deleted: true})
 

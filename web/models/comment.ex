@@ -14,21 +14,23 @@ defmodule Lift.Comment do
     field :deleted,    :boolean, default: false
     field :anonymous,  :boolean, default: false
     field :like_count, :integer, default: 0, virtual: true
+    field :liked,      :boolean, default: false, virtual: true
 
     timestamps()
   end
 
   @required_fields ~w(post_id type)a
-  @optional_fields ~w(body parent_id)a
+  @optional_fields ~w(body parent_id anonymous)a
 
   def with_associations(query) do
     preload(query, [:user, :comment])
   end
 
-  def with_likes(query) do
+  def with_likes(query, user_id) do
     from c in query,
       left_join: l in assoc(c, :likes),
-      select: %{c | like_count: count(l.id)},
+      left_join: ul in assoc(c, :likes), on: ul.user_id == ^user_id,
+      select: %{c | like_count: count(l.id), liked: count(ul.id) != 0},
       group_by: c.id
   end
 
