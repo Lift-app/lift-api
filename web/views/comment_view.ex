@@ -30,6 +30,7 @@ defmodule Lift.CommentView do
 
     %{
       id: comment.id,
+      liked: comment.liked,
       type: comment.type,
       post_id: comment.post_id,
       parent_id: comment.parent_id,
