@@ -53,5 +53,9 @@ defmodule Lift.Router do
       get "/:provider/callback", OAuthController, :callback
       delete "/logout", OAuthController, :delete
     end
+
+    scope "/invite" do
+      get "/make", UserController, :make_invite
+    end
   end
 end

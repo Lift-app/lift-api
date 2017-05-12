@@ -2,9 +2,11 @@ defmodule Lift.UserController do
   use Lift.Web, :controller
   use Guardian.Phoenix.Controller
 
-  alias Lift.{User, Category, CategoryView}
+  alias Lift.{User, Category, CategoryView, OTA}
 
-  plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
+  plug Guardian.Plug.EnsureAuthenticated,
+    [handler: Lift.TokenController]
+    when not action in [:make_invite]
 
   def show(conn, _params, user, _claims) do
     user = Repo.preload(user, [:categories])
@@ -43,5 +45,9 @@ defmodule Lift.UserController do
         |> put_status(:unprocessable_entity)
         |> render(Lift.ChangesetView, "error.json", changeset: changeset)
     end
+  end
+
+  def make_invite(conn, _params, _user, _claims) do
+    json(conn, %{invite_token: OTA.set_ota_token()})
   end
 end
