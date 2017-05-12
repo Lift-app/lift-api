@@ -1,5 +1,5 @@
 defmodule Lift.UploadAuthPlug do
-  alias Lift.UploadAuth
+  alias Lift.OTA
 
   def init(opts) do
     Enum.into(opts, %{})
@@ -9,7 +9,7 @@ defmodule Lift.UploadAuthPlug do
     token = Map.get(params, "token")
     handler = Map.get(opts, :handler)
 
-    case UploadAuth.verify_token(token) do
+    case OTA.verify_media_token(token) do
       :ok ->
         conn
       {:error, reason} ->

@@ -1,26 +1,36 @@
 defmodule Lift.OTA do
   alias Lift.RedixPool, as: Redix
 
-  @namespace "ota_tokens"
+  def generate_media_token, do: generate_ota_token("media_tokens", 20)
+  def verify_media_token(token), do: verify_ota_token("media_tokens", token)
 
-  defp random_str(length \\ 32) do
-    :crypto.strong_rand_bytes(length)
-    |> Base.url_encode64
-    |> binary_part(0, length)
-  end
+  def generate_signup_token, do: generate_ota_token("signup_tokens")
+  def verify_signup_token(token), do: verify_ota_token("signup_tokens", token)
 
-  def set_ota_token() do
-    token = random_str()
-    Redix.command(["SET", "#{@namespace}:#{token}", ""])
+  defp generate_ota_token(namespace, expiry \\ false) do
+    token = random_string()
+
+    if expiry do
+      Redix.command(["SET", "#{namespace}:#{token}", "", "EX", expiry])
+    else
+      Redix.command(["SET", "#{namespace}:#{token}", ""])
+    end
+
     token
   end
 
-  def validate_ota_token(token \\ "") do
-    case Redix.command(~w(EXISTS "#{@namespace}:#{token}")) do
+  defp verify_ota_token(namespace, token \\ "") do
+    case Redix.command(~w(EXISTS "#{namespace}:#{token}")) do
       {:ok, 1} ->
-        Redix.command(~w(DEL "#{@namespace}:#{token}"))
+        Redix.command(~w(DEL "#{namespace}:#{token}"))
       _ ->
         {:error, "Token not found"}
     end
+  end
+
+  defp random_string(length \\ 32) do
+    :crypto.strong_rand_bytes(length)
+    |> Base.url_encode64
+    |> binary_part(0, length)
   end
 end

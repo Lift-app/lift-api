@@ -48,6 +48,6 @@ defmodule Lift.UserController do
   end
 
   def make_invite(conn, _params, _user, _claims) do
-    json(conn, %{invite_token: OTA.set_ota_token()})
+    json(conn, %{invite_token: OTA.generate_signup_token()})
   end
 end

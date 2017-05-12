@@ -1,7 +1,7 @@
 defmodule Lift.UserView do
   use Lift.Web, :view
 
-  alias Lift.UploadAuth
+  alias Lift.OTA
 
   def render("index.json", %{users: users}) do
     %{data: render_many(users, Lift.UserView, "user.json")}
@@ -34,7 +34,7 @@ defmodule Lift.UserView do
 
   defp user_avatar(%{avatar: nil}), do: nil
   defp user_avatar(user) do
-    token = UploadAuth.generate_unique_token()
+    token = OTA.generate_media_token()
     url = "#{Lift.Endpoint.url}/media/avatars/#{user.id}?token=#{token}"
 
     %{
