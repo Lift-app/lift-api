@@ -18,7 +18,6 @@ defmodule Lift.TokenController do
         conn
         |> put_status(:unprocessable_entity)
         |> json(%{message: "Invalid login"})
-
     end
   end
 

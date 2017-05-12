@@ -19,8 +19,9 @@ defmodule Lift.User do
 
   @required_fields ~w(username email)a
   @optional_fields ~w(password)a
+  @required_oauth_fields ~w(email)a
 
-  def find_by_email(email) do
+  def find_by_email(email \\ "") do
     from u in __MODULE__, where: ilike(u.email, ^email)
   end
 
@@ -35,6 +36,12 @@ defmodule Lift.User do
     |> validate_required(@required_fields)
     |> cast_attachments(params, [:avatar])
     |> hash_password
+  end
+
+  def oauth_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, @required_oauth_fields)
+    |> validate_required(@required_oauth_fields)
   end
 
   defp constraints(struct) do
