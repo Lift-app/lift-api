@@ -3,6 +3,8 @@ defmodule Lift.CommentView do
 
   import Lift.DateHelpers
 
+  alias Lift.UploadAuth
+
   def render("index.json", %{comments: comments}) do
     %{data: render_many(comments, Lift.CommentView, "comment.json")}
   end
@@ -15,10 +17,20 @@ defmodule Lift.CommentView do
     user = if comment.deleted or comment.anonymous,
       do: nil,
       else: render_one(comment.user, Lift.UserView, "user.json")
-    body = if comment.deleted, do: nil, else: comment.body
+    body =
+      cond do
+        comment.deleted ->
+          nil
+        comment.type == :audio ->
+          token = UploadAuth.generate_unique_token()
+          "#{Lift.Endpoint.url}/media/comments/#{comment.id}?token=#{token}"
+        :otherwise ->
+          comment.body
+      end
 
     %{
       id: comment.id,
+      type: comment.type,
       post_id: comment.post_id,
       parent_id: comment.parent_id,
       user: user,
