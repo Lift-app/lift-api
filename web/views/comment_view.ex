@@ -3,7 +3,7 @@ defmodule Lift.CommentView do
 
   import Lift.DateHelpers
 
-  alias Lift.UploadAuth
+  alias Lift.OTA
 
   def render("index.json", %{comments: comments}) do
     %{data: render_many(comments, Lift.CommentView, "comment.json")}
@@ -22,7 +22,7 @@ defmodule Lift.CommentView do
         comment.deleted ->
           nil
         comment.type == :audio ->
-          token = UploadAuth.generate_unique_token()
+          token = OTA.generate_media_token()
           "#{Lift.Endpoint.url}/media/comments/#{comment.id}?token=#{token}"
         :otherwise ->
           comment.body

@@ -1,7 +1,7 @@
 defmodule Lift.OTA do
   alias Lift.RedixPool, as: Redix
 
-  def generate_media_token, do: generate_ota_token("media_tokens", 20)
+  def generate_media_token, do: generate_ota_token("media_tokens", 3600)
   def verify_media_token(token), do: verify_ota_token("media_tokens", token)
 
   def generate_signup_token, do: generate_ota_token("signup_tokens")
@@ -20,9 +20,10 @@ defmodule Lift.OTA do
   end
 
   defp verify_ota_token(namespace, token \\ "") do
-    case Redix.command(~w(EXISTS "#{namespace}:#{token}")) do
+    case Redix.command(~w(EXISTS #{namespace}:#{token})) do
       {:ok, 1} ->
-        Redix.command(~w(DEL "#{namespace}:#{token}"))
+        Redix.command(~w(DEL #{namespace}:#{token}))
+        :ok
       _ ->
         {:error, "Token not found"}
     end
