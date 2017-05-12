@@ -33,6 +33,7 @@ defmodule Lift.CommentViewTest do
 
     assert rendered_comment == %{
       id: comment.id,
+      type: comment.type,
       post_id: comment.post_id,
       parent_id: comment.parent_id,
       user: %{

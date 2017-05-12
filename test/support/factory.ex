@@ -30,7 +30,8 @@ defmodule Lift.Factory do
     %Lift.Comment{
       user: build(:user),
       post: build(:post),
-      body: "Just a comment!"
+      body: "Just a comment!",
+      type: :text
     }
   end
 

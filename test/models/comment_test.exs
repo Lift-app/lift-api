@@ -3,7 +3,7 @@ defmodule Lift.CommentTest do
 
   alias Lift.Comment
 
-  @valid_attrs %{user_id: 1, post_id: 1, body: "some content"}
+  @valid_attrs %{user_id: 1, post_id: 1, body: "some content", type: :text}
   @invalid_attrs %{body: nil}
 
   test "changeset with valid attributes" do
