@@ -2,8 +2,7 @@ defmodule Lift.PostController do
   use Lift.Web, :controller
   use Guardian.Phoenix.Controller
 
-  alias Lift.Post
-  alias Lift.Audio
+  alias Lift.{Post, Audio}
 
   plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
@@ -30,7 +29,8 @@ defmodule Lift.PostController do
     render(conn, "index.json", posts: posts)
   end
 
-  def create(conn, %{"type" => "audio", "audio" => audio} = post_params, user, _claims) do
+  def create(conn, %{"type" => "audio"} = post_params, user, _claims) do
+    audio = Map.get(post_params, "audio", "")
     changeset =
       Post.changeset(%Post{}, post_params) |> Ecto.Changeset.put_assoc(:user, user)
 

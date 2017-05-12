@@ -1,7 +1,7 @@
 defmodule Lift.CommentController do
   use Lift.Web, :controller
 
-  alias Lift.{Comment, Post}
+  alias Lift.{Comment, Post, Audio}
 
   plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
@@ -16,6 +16,38 @@ defmodule Lift.CommentController do
     render(conn, "index.json", comments: comments)
   end
 
+  def create(conn, %{"type" => "audio"} = comment_params) do
+    audio = Map.get(comment_params, "audio", "")
+    user = Guardian.Plug.current_resource(conn)
+    changeset =
+      Comment.changeset(%Comment{}, comment_params)
+      |> Ecto.Changeset.put_assoc(:user, user)
+
+    transaction = Repo.transaction(fn ->
+      comment = Repo.insert!(changeset)
+
+      case Audio.store({audio, comment}) do
+        {:ok, _filename} -> comment
+        {:error, _error} -> Repo.rollback(:bad_audio)
+      end
+    end)
+
+    case transaction do
+      {:ok, comment} ->
+        conn
+        |> put_status(:created)
+        |> put_resp_header("location", comment_path(conn, :show, comment))
+        |> render("show.json", comment: Repo.preload(comment, [:user]))
+      {:error, :bad_audio} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{"errors": "Invalid audio file"})
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Lift.ChangesetView, "error.json", changeset: changeset)
+    end
+  end
   def create(conn, comment_params) do
     user = Guardian.Plug.current_resource(conn)
     changeset =

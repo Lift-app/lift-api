@@ -51,12 +51,7 @@ defmodule Lift.Post do
     |> validate_required(@required_fields)
   end
 
-  defp constraints(struct) do
-    struct
-    |> unique_constraint(:name)
-  end
-
-  defp validate_body_present(struct) do
+  def validate_body_present(struct) do
     type = get_field(struct, :type)
 
     if type == :text and (get_field(struct, :body) in [nil, ""]) do
@@ -64,5 +59,10 @@ defmodule Lift.Post do
     else
       struct
     end
+  end
+
+  defp constraints(struct) do
+    struct
+    |> unique_constraint(:name)
   end
 end
