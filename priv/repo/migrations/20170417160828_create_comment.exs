@@ -13,6 +13,9 @@ defmodule Lift.Repo.Migrations.CreateComment do
 
       timestamps()
     end
+
+    create index(:comments, [:user_id])
+    create index(:comments, [:post_id])
   end
 
   def down do

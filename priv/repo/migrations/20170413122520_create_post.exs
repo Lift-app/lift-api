@@ -14,6 +14,8 @@ defmodule Lift.Repo.Migrations.CreatePost do
 
       timestamps()
     end
+
+    create index(:posts, [:user_id])
   end
 
   def down do

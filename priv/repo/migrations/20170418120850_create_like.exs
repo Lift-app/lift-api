@@ -10,6 +10,10 @@ defmodule Lift.Repo.Migrations.CreateLike do
       timestamps()
     end
 
+    create index(:likes, [:user_id])
+    create index(:likes, [:post_id])
+    create index(:likes, [:comment_id])
+
     create unique_index(:likes, [:user_id, :post_id])
     create unique_index(:likes, [:user_id, :comment_id])
   end
