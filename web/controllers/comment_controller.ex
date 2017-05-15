@@ -10,7 +10,7 @@ defmodule Lift.CommentController do
     post = Repo.get!(Post, post_id)
     comments =
       assoc(post, :comments)
-      |> Comment.ordered
+      # |> Comment.ordered
       |> Comment.with_associations
       |> Comment.with_likes(user.id)
       |> Repo.all
