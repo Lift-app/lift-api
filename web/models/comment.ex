@@ -1,8 +1,6 @@
 defmodule Lift.Comment do
   use Lift.Web, :model
 
-  alias Lift.Post
-
   schema "comments" do
     belongs_to :user,    Lift.User
     belongs_to :post,    Lift.Post
@@ -38,13 +36,16 @@ defmodule Lift.Comment do
       group_by: c.id
   end
 
-  @doc """
-  Builds a changeset based on the `struct` and `params`.
-  """
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @required_fields ++ @optional_fields)
-    |> Post.validate_body_present
+    |> validate_length(:body, max: 600)
     |> validate_required(@required_fields)
+  end
+
+  def audio_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, @required_fields ++ @optional_fields)
+    |> validate_required(@required_fields ++ [:body])
   end
 end
