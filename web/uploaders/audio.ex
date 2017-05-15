@@ -15,7 +15,7 @@ defmodule Lift.Audio do
   end
 
   def transform(:original, _) do
-    {:ffmpeg, fn(input, output) -> "-i #{input} -f mp3 #{output}" end, :mp3}
+    {:ffmpeg, fn(input, output) -> "-i #{input} -f wav #{output}" end, :wav}
   end
 
   def storage_dir(_version, {_file, scope}) do
