@@ -12,7 +12,7 @@ defmodule Lift.PostController do
       Post
       |> Post.ordered
       |> Post.with_associations
-      |> Post.with_likes_and_comments(user.id)
+      |> Post.with_liked(user.id)
       |> Repo.paginate(params)
 
     render(conn, "index.json", posts: posts)
@@ -23,7 +23,7 @@ defmodule Lift.PostController do
       Post
       |> Post.ordered
       |> Post.with_associations
-      |> Post.with_likes_and_comments(user.id)
+      |> Post.with_liked(user.id)
       |> Repo.paginate(params)
 
     render(conn, "index.json", posts: posts)
@@ -48,7 +48,7 @@ defmodule Lift.PostController do
         conn
         |> put_status(:created)
         |> put_resp_header("location", post_path(conn, :show, post))
-        |> render("show.json", post: Repo.preload(post, [:category, :user]))
+        |> render("show.json", post: Repo.preload(post, [:category, :user, :comments, :likes]))
       {:error, :bad_audio} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -68,7 +68,7 @@ defmodule Lift.PostController do
         conn
         |> put_status(:created)
         |> put_resp_header("location", post_path(conn, :show, post))
-        |> render("show.json", post: Repo.preload(post, [:category, :user]))
+        |> render("show.json", post: Repo.preload(post, [:category, :user, :comments, :likes]))
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -80,7 +80,7 @@ defmodule Lift.PostController do
     post =
       Post
       |> Post.with_associations
-      |> Post.with_likes_and_comments(user.id)
+      |> Post.with_liked(user.id)
       |> Repo.get!(id)
 
     render(conn, "show.json", post: post)

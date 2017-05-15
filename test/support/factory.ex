@@ -22,7 +22,9 @@ defmodule Lift.Factory do
       user: %Lift.User{},
       category: build(:category),
       body: "Test post",
-      type: :text
+      type: :text,
+      comments: [],
+      likes: []
     }
   end
 

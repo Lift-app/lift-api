@@ -12,8 +12,6 @@ defmodule Lift.Post do
     field :type,          TypeEnum
     field :locked,        :boolean, default: false
     field :anonymous,     :boolean, default: false
-    field :like_count,    :integer, default: 0, virtual: true
-    field :comment_count, :integer, default: 0, virtual: true
     field :liked,         :boolean, default: false, virtual: true
 
     timestamps()
@@ -27,16 +25,13 @@ defmodule Lift.Post do
   end
 
   def with_associations(query) do
-    preload(query, [:user, :category])
+    preload(query, [:user, :category, :comments, :likes])
   end
 
-  def with_likes_and_comments(query, user_id) do
+  def with_liked(query, user_id) do
     from p in query,
-      left_join: l in assoc(p, :likes),
-      left_join: c in assoc(p, :comments),
       left_join: ul in assoc(p, :likes), on: ul.user_id == ^user_id,
-      select: %{p | like_count: count(l.id), comment_count: count(c.id),
-                    liked: count(ul.id) != 0},
+      select: %{p | liked: count(ul.id) != 0},
       group_by: p.id
   end
 
