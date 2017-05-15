@@ -22,6 +22,10 @@ defmodule Lift.Comment do
   @required_fields ~w(post_id type)a
   @optional_fields ~w(body parent_id anonymous)a
 
+  def ordered(query) do
+    order_by(query, desc: :inserted_at)
+  end
+
   def with_associations(query) do
     preload(query, [:user, :comment])
   end
