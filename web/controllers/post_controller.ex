@@ -4,6 +4,8 @@ defmodule Lift.PostController do
 
   alias Lift.{Post, Audio}
 
+  require Logger
+
   plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
   def voorjou(conn, params, user, _claims) do
@@ -38,8 +40,11 @@ defmodule Lift.PostController do
       post = Repo.insert!(changeset)
 
       case Audio.store({audio, post}) do
-        {:ok, _filename} -> post
-        {:error, _error} -> Repo.rollback(:bad_audio)
+        {:ok, _filename} ->
+          post
+        {:error, error} ->
+          Logger.error error
+          Repo.rollback(:bad_audio)
       end
     end)
 
