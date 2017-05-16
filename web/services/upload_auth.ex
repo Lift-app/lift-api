@@ -5,7 +5,7 @@ defmodule Lift.UploadAuth do
 
   def generate_unique_token do
     token = random_string()
-    Redix.command(["SET", "#{@namespace}:#{token}", "", "EX", 20])
+    Redix.command(["SET", "#{@namespace}:#{token}", "", "EX", 3600])
 
     token
   end
