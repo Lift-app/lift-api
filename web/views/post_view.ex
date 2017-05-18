@@ -3,7 +3,7 @@ defmodule Lift.PostView do
 
   import Lift.DateHelpers
 
-  alias Lift.UploadAuth
+  alias Lift.OTA
 
   def render("index.json", %{posts: posts}) do
     %{data: render_many(posts, Lift.PostView, "post.json")}
@@ -17,7 +17,7 @@ defmodule Lift.PostView do
     user = if post.anonymous, do: nil, else: render_one(post.user, Lift.UserView, "user.json")
     body =
       if post.type == :audio do
-        token = UploadAuth.generate_unique_token()
+        token = OTA.generate_media_token()
         "#{Lift.Endpoint.url}/media/posts/#{post.id}?token=#{token}"
       else
         post.body
