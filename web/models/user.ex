@@ -6,10 +6,11 @@ defmodule Lift.User do
     many_to_many :categories, Lift.Category,
       join_through: "user_interests",
       on_replace: :delete
+    has_many :follows, Lift.Follow
 
     field :username,      :string
     field :email,         :string
-    field :bio,           :text
+    field :bio,           :string
     field :password,      :string, virtual: true
     field :password_hash, :string
     field :banned,        :boolean, default: false
@@ -42,6 +43,7 @@ defmodule Lift.User do
   def oauth_changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @required_oauth_fields)
+    |> unique_constraint(:email)
     |> validate_required(@required_oauth_fields)
   end
 
