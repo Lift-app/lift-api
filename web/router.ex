@@ -22,6 +22,7 @@ defmodule Lift.Router do
       scope "/me" do
         get "/", UserController, :me
         put "/", UserController, :update
+        put "/onboarded", UserController, :onboarded
         put "/interests", UserController, :update_interests
       end
 

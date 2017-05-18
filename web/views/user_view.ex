@@ -26,6 +26,7 @@ defmodule Lift.UserView do
       email: user.email,
       interests: render_many(user.categories, Lift.CategoryView, "category.json"),
       avatar: user_avatar(user),
+      onboarded: user.onboarded,
 
       created_at: user.inserted_at,
       updated_at: user.updated_at,

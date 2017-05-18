@@ -57,6 +57,20 @@ defmodule Lift.UserController do
     end
   end
 
+  def onboarded(conn, _params, user, _claims) do
+    changeset = Ecto.Changeset.change(user, onboarded: true)
+
+    case Repo.update(changeset) do
+      {:ok, _user} ->
+        conn
+        |> send_resp(:no_content, "")
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Lift.ChangesetView, "error.json", changeset: changeset)
+    end
+  end
+
   def make_invite(conn, _params, _user, _claims) do
     json(conn, %{invite_token: OTA.generate_signup_token()})
   end

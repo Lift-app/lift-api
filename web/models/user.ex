@@ -15,6 +15,7 @@ defmodule Lift.User do
     field :password_hash, :string
     field :banned,        :boolean, default: false
     field :avatar,        Lift.Avatar.Type
+    field :onboarded,     :boolean, default: false
     field :following,     :boolean, virtual: true
 
     timestamps()
