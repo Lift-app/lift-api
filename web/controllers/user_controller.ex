@@ -8,9 +8,19 @@ defmodule Lift.UserController do
     [handler: Lift.TokenController]
     when not action in [:make_invite]
 
-  def show(conn, _params, user, _claims) do
+  def me(conn, _params, user, _claims) do
     user = Repo.preload(user, [:categories])
     render(conn, "authenticated_user.json", user: user)
+  end
+
+  def show(conn, %{"id" => id}, user, _claims) do
+    user =
+      User
+      |> preload([:categories])
+      |> User.with_following(user.id)
+      |> Repo.get!(id)
+
+    render(conn, "profile.json", user: user)
   end
 
   def update_interests(conn, %{"interest_ids" => interest_ids}, user, _claims) do

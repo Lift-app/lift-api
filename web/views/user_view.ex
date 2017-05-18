@@ -32,6 +32,20 @@ defmodule Lift.UserView do
     }
   end
 
+  def render("profile.json", %{user: user}) do
+    %{
+      id: user.id,
+      username: user.username,
+      bio: user.bio,
+      following: user.following,
+      interests: render_many(user.categories, Lift.CategoryView, "category.json"),
+      avatar: user_avatar(user),
+
+      created_at: user.inserted_at,
+      updated_at: user.updated_at,
+    }
+  end
+
   defp user_avatar(%{avatar: nil}), do: nil
   defp user_avatar(user) do
     token = OTA.generate_media_token()

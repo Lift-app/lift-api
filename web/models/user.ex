@@ -6,23 +6,34 @@ defmodule Lift.User do
     many_to_many :categories, Lift.Category,
       join_through: "user_interests",
       on_replace: :delete
+    has_many :follows, Lift.Follow
 
     field :username,      :string
     field :email,         :string
+    field :bio,           :string
     field :password,      :string, virtual: true
     field :password_hash, :string
     field :banned,        :boolean, default: false
     field :avatar,        Lift.Avatar.Type
+    field :following,     :boolean, virtual: true
 
     timestamps()
   end
 
   @required_fields ~w(username email)a
-  @optional_fields ~w(password)a
+  @optional_fields ~w(password bio)a
   @required_oauth_fields ~w(email)a
 
   def find_by_email(email \\ "") do
     from u in __MODULE__, where: ilike(u.email, ^email)
+  end
+
+  def with_following(query, user_id) do
+    from u in query,
+      left_join: f in Lift.Follow,
+        on: f.following_id == u.id and f.follower_id == ^user_id,
+      select: %{u | following: count(f.id) != 0},
+      group_by: u.id
   end
 
   @doc """
@@ -41,6 +52,7 @@ defmodule Lift.User do
   def oauth_changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @required_oauth_fields)
+    |> unique_constraint(:email)
     |> validate_required(@required_oauth_fields)
   end
 

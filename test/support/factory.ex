@@ -42,4 +42,11 @@ defmodule Lift.Factory do
       user: build(:user)
     }
   end
+
+  def follow_factory do
+    %Lift.Follow{
+      user_following: build(:user),
+      user_follower: build(:user)
+    }
+  end
 end
