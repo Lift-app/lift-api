@@ -13,7 +13,10 @@
 alias Lift.{Repo, User, Category, Post, Comment}
 
 # Categories
-categories = ["Financiën", "Werk", "Gezondheid", "Dagelijks leven"]
+categories = [
+  "Financiën", "Werk", "Gezondheid", "Dagelijks", "Liefde", "Geloof", "Online",
+  "Mode"
+]
 Enum.each(categories, fn category ->
   Repo.insert!(%Category{name: category})
 end)
