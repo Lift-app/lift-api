@@ -9,6 +9,7 @@ defmodule Lift.User do
 
     field :username,      :string
     field :email,         :string
+    field :bio,           :text
     field :password,      :string, virtual: true
     field :password_hash, :string
     field :banned,        :boolean, default: false
@@ -18,7 +19,7 @@ defmodule Lift.User do
   end
 
   @required_fields ~w(username email)a
-  @optional_fields ~w(password)a
+  @optional_fields ~w(password bio)a
   @required_oauth_fields ~w(email)a
 
   def find_by_email(email \\ "") do

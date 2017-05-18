@@ -6,9 +6,14 @@ defmodule Lift.UserController do
 
   plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
-  def show(conn, _params, user, _claims) do
+  def me(conn, _params, user, _claims) do
     user = Repo.preload(user, [:categories])
     render(conn, "authenticated_user.json", user: user)
+  end
+
+  def show(conn, %{"id" => id}, _user, _claims) do
+    user = Repo.get!(User, id) | Repo.preload([:categories])
+    render(conn, "profile.json", user: user)
   end
 
   def update_interests(conn, %{"interest_ids" => interest_ids}, user, _claims) do

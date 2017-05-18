@@ -5,6 +5,7 @@ defmodule Lift.Repo.Migrations.CreateUser do
     create table(:users) do
       add :username,      :string
       add :email,         :string
+      add :bio,           :text
       add :password_hash, :string
       add :banned,        :boolean, default: false
       add :avatar,        :string
