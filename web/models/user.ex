@@ -15,6 +15,7 @@ defmodule Lift.User do
     field :password_hash, :string
     field :banned,        :boolean, default: false
     field :avatar,        Lift.Avatar.Type
+    field :following,     :boolean, virtual: true
 
     timestamps()
   end
@@ -25,6 +26,14 @@ defmodule Lift.User do
 
   def find_by_email(email \\ "") do
     from u in __MODULE__, where: ilike(u.email, ^email)
+  end
+
+  def with_following(query, user_id) do
+    from u in query,
+      left_join: f in Lift.Follow,
+        on: f.following_id == u.id and f.follower_id == ^user_id,
+      select: %{u | following: count(f.id) != 0},
+      group_by: u.id
   end
 
   @doc """

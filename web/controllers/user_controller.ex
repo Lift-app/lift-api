@@ -11,8 +11,13 @@ defmodule Lift.UserController do
     render(conn, "authenticated_user.json", user: user)
   end
 
-  def show(conn, %{"id" => id}, _user, _claims) do
-    user = Repo.get!(User, id) |> Repo.preload([:categories])
+  def show(conn, %{"id" => id}, user, _claims) do
+    user =
+      User
+      |> preload([:categories])
+      |> User.with_following(user.id)
+      |> Repo.get!(id)
+
     render(conn, "profile.json", user: user)
   end
 

@@ -37,6 +37,7 @@ defmodule Lift.UserView do
       id: user.id,
       username: user.username,
       bio: user.bio,
+      following: user.following,
       interests: render_many(user.categories, Lift.CategoryView, "category.json"),
       avatar: user_avatar(user),
 
