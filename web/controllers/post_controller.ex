@@ -34,7 +34,7 @@ defmodule Lift.PostController do
   def create(conn, %{"type" => "audio"} = post_params, user, _claims) do
     audio = Map.get(post_params, "audio", "")
     changeset =
-      Post.changeset(%Post{}, post_params) |> Ecto.Changeset.put_assoc(:user, user)
+      Post.audio_changeset(%Post{}, post_params) |> Ecto.Changeset.put_assoc(:user, user)
 
     transaction = Repo.transaction(fn ->
       post = Repo.insert!(changeset)

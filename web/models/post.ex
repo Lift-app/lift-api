@@ -35,25 +35,19 @@ defmodule Lift.Post do
       group_by: p.id
   end
 
-  @doc """
-  Builds a changeset based on the `struct` and `params`.
-  """
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, @required_fields ++ @optional_fields)
     |> constraints
-    |> validate_body_present
-    |> validate_required(@required_fields)
+    |> validate_length(:body, max: 600)
+    |> validate_required(@required_fields ++ [:body])
   end
 
-  def validate_body_present(struct) do
-    type = get_field(struct, :type)
-
-    if type == :text and (get_field(struct, :body) in [nil, ""]) do
-      add_error(struct, :body, "missing body")
-    else
-      struct
-    end
+  def audio_changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, @required_fields ++ @optional_fields)
+    |> constraints
+    |> validate_required(@required_fields)
   end
 
   defp constraints(struct) do

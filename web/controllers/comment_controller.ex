@@ -21,7 +21,7 @@ defmodule Lift.CommentController do
   def create(conn, %{"type" => "audio"} = comment_params, user, _claims) do
     audio = Map.get(comment_params, "audio", "")
     changeset =
-      Comment.changeset(%Comment{}, comment_params)
+      Comment.audio_changeset(%Comment{}, comment_params)
       |> Ecto.Changeset.put_assoc(:user, user)
 
     transaction = Repo.transaction(fn ->
