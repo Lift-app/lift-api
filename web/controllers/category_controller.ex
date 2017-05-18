@@ -6,7 +6,7 @@ defmodule Lift.CategoryController do
   plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
   def index(conn, _params) do
-    categories = Repo.all(Category)
+    categories = Category |> Category.with_posts |> Repo.all
     render(conn, "index.json", categories: categories)
   end
 
@@ -27,7 +27,7 @@ defmodule Lift.CategoryController do
   end
 
   def show(conn, %{"id" => id}) do
-    category = Repo.get!(Category, id)
+    category = Category |> Category.with_posts |> Repo.get!(id)
     render(conn, "show.json", category: category)
   end
 

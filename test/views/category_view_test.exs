@@ -33,7 +33,8 @@ defmodule Lift.CategoryViewTest do
     assert rendered_category == %{
       id: category.id,
       name: category.name,
-      description: category.description
+      description: category.description,
+      post_count: 0
     }
   end
 end

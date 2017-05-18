@@ -13,7 +13,8 @@ defmodule Lift.Factory do
   def category_factory do
     %Lift.Category{
       name: sequence(:name, &"Werk#{&1}"),
-      description: "Alles over werken"
+      description: "Alles over werken",
+      post_count: 0
     }
   end
 
