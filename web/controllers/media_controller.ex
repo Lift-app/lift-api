@@ -10,7 +10,7 @@ defmodule Lift.MediaController do
     audio_path = Audio.url({"#{id}.wav", post})
 
     conn
-    |> put_resp_content_type("audio/wav")
+    |> put_resp_header("content-type", "audio/x-wav")
     |> Plug.Conn.send_file(200, audio_path)
   end
 
@@ -19,7 +19,7 @@ defmodule Lift.MediaController do
     audio_path = Audio.url({"#{id}.wav", comment})
 
     conn
-    |> put_resp_content_type("audio/wav")
+    |> put_resp_header("content-type", "audio/x-wav")
     |> Plug.Conn.send_file(200, audio_path)
   end
 
