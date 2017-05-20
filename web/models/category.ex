@@ -12,7 +12,7 @@ defmodule Lift.Category do
   @required_fields ~w(name)a
   @optional_fields ~w(description)a
 
-  def with_posts(query) do
+  def with_post_count(query) do
     from c in query,
       left_join: p in assoc(c, :posts),
       select: %{c | post_count: count(p.id)},

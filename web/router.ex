@@ -28,7 +28,8 @@ defmodule Lift.Router do
     end
 
     scope "/categories" do
-      resources "/", CategoryController, except: [:new, :edit]
+      get "/:name", CategoryController, :show
+      resources "/", CategoryController, except: [:new, :edit, :show]
 
       get "/:category_ids/posts", CategoryController, :posts
     end
