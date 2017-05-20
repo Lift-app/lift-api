@@ -10,7 +10,7 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-alias Lift.{Repo, User, Category, Post, Comment}
+alias Lift.{Repo, User, Category, Post, Comment, Follow}
 
 # Categories
 categories = [
@@ -55,8 +55,7 @@ end)
 
 # Interests
 all_categories = Repo.all(Category)
-all_users = Repo.all(User)
-Enum.each(all_users, fn user ->
+Enum.each(Repo.all(User), fn user ->
   user
   |> Repo.preload([:categories])
   |> Ecto.Changeset.change
@@ -119,4 +118,16 @@ Enum.each(replies, fn reply ->
     post_id: comment.post_id,
     body: reply
   })
+end)
+
+# Follows
+Enum.each(Repo.all(User), fn user ->
+  case Enum.random([true, false, false, false]) do
+    true ->
+      Repo.insert!(%Follow{
+        follower_id: 1,
+        following_id: user.id
+      })
+    _ -> # noop
+  end
 end)

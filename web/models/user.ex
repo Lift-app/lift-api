@@ -6,7 +6,7 @@ defmodule Lift.User do
     many_to_many :categories, Lift.Category,
       join_through: "user_interests",
       on_replace: :delete
-    has_many :follows, Lift.Follow
+    has_many :follows, Lift.Follow, foreign_key: :following_id
 
     field :username,      :string
     field :email,         :string
@@ -17,6 +17,7 @@ defmodule Lift.User do
     field :avatar,        Lift.Avatar.Type
     field :onboarded,     :boolean, default: false
     field :following,     :boolean, virtual: true
+    field :followers,     :integer, virtual: true, default: 0
 
     timestamps()
   end

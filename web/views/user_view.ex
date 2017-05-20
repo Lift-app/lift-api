@@ -34,6 +34,7 @@ defmodule Lift.UserView do
   end
 
   def render("profile.json", %{user: user}) do
+    IO.inspect user
     %{
       id: user.id,
       username: user.username,
@@ -41,9 +42,9 @@ defmodule Lift.UserView do
       following: user.following,
       interests: render_many(user.categories, Lift.CategoryView, "category.json"),
       avatar: user_avatar(user),
+      followers: length(user.follows),
 
-      created_at: user.inserted_at,
-      updated_at: user.updated_at,
+      created_at: user.inserted_at
     }
   end
 

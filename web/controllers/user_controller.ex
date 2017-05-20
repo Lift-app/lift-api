@@ -16,7 +16,7 @@ defmodule Lift.UserController do
   def show(conn, %{"id" => id}, user, _claims) do
     user =
       User
-      |> preload([:categories])
+      |> preload([:categories, :follows])
       |> User.with_following(user.id)
       |> Repo.get!(id)
 

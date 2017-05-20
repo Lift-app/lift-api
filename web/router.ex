@@ -11,8 +11,6 @@ defmodule Lift.Router do
   scope "/", Lift do
     pipe_through :api
 
-    get "/voorjou", PostController, :voorjou
-
     resources "/tokens", TokenController, only: [:create, :delete]
 
     scope "/users" do
@@ -37,6 +35,7 @@ defmodule Lift.Router do
 
     scope "/posts" do
       resources "/", PostController, except: [:new, :edit]
+      get "/voorjou", PostController, :voorjou
 
       resources "/:post_id/comments", CommentController, only: [:index, :create]
 
