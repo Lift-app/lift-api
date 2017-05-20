@@ -23,34 +23,39 @@ end)
 
 # Users
 users = [
-  %{
+  %User{
+    username: "ziggy",
+    email: "zippyqtpie@gmail.com",
+    oauth: true
+  },
+  %User{
     username: "steve",
     email: "steve@gmail.com",
     password: "foo123",
   },
-  %{
+  %User{
     username: "mclatte",
     email: "mclatte@gmail.com",
     password: "foo123",
   },
-  %{
+  %User{
     username: "teun",
     email: "teun@gmail.com",
     password: "foo123",
   },
-  %{
+  %User{
     username: "mirko",
     email: "mirko@gmail.com",
     password: "foo123",
   },
-  %{
+  %User{
     username: "rene",
     email: "rene@gmail.com",
     password: "foo123",
   }
 ]
 Enum.each(users, fn user ->
-  Repo.insert!(User.changeset(%User{}, user))
+  Repo.insert!(user)
 end)
 
 # Interests

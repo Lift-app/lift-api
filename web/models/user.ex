@@ -16,6 +16,7 @@ defmodule Lift.User do
     field :banned,        :boolean, default: false
     field :avatar,        Lift.Avatar.Type
     field :onboarded,     :boolean, default: false
+    field :oauth,         :boolean, default: false
     field :following,     :boolean, virtual: true
     field :followers,     :integer, virtual: true, default: 0
 

@@ -3,21 +3,6 @@ defmodule Lift.OAuthController do
 
   alias Lift.{User, Auth, Google}
 
-  # Private
-  defp populate_user!(user) do
-    username =
-      fn length ->
-        :crypto.strong_rand_bytes(length)
-        |> Base.encode32
-        |> binary_part(0, length)
-        |> String.downcase
-      end
-    user
-    |> User.oauth_changeset()
-    |> Ecto.Changeset.change(%{username: username.(8)})
-    |> Repo.update!
-  end
-
   # Google
   defp fetch_body!("google", client) do
     OAuth2.Client.get!(client, "https://www.googleapis.com/plus/v1/people/me/openIdConnect")
@@ -37,33 +22,17 @@ defmodule Lift.OAuthController do
   end
 
   def index(conn, %{"provider" => provider}) do
-    redirect conn, external: authorize_url!(provider)
-  end
-
-  def delete(conn, _params) do
-    conn
-    |> configure_session(drop: true)
-    |> redirect(to: "/")
+    json conn, %{"url": authorize_url!(provider)}
   end
 
   def callback(conn, %{"provider" => provider, "code" => code}) do
     client = fetch_token!(provider, code)
     body = fetch_body!(provider, client)
     user = User.find_by_email(body["email"]) |> Repo.one
-    user =
-      case user do
-        %User{username: nil} ->
-          populate_user!(user)
-        %User{} ->
-          user
-        nil ->
-          nil
-      end
+
     cond do
       user && validate_token!(provider, client) ->
-        conn
-        |> put_status(:ok)
-        |> json(%{jwt: Auth.generate_token(user)})
+        json conn, %{jwt: Auth.generate_token(user)}
       true ->
         conn
         |> put_status(:unprocessable_entity)

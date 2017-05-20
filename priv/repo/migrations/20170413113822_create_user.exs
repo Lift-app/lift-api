@@ -10,6 +10,7 @@ defmodule Lift.Repo.Migrations.CreateUser do
       add :banned,        :boolean, default: false
       add :avatar,        :string
       add :onboarded,     :boolean
+      add :oauth,         :boolean, default: false
 
       timestamps()
     end
