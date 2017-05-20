@@ -23,39 +23,43 @@ end)
 
 # Users
 users = [
-  %User{
-    username: "ziggy",
-    email: "zippyqtpie@gmail.com",
-    oauth: true
-  },
-  %User{
+  %{
     username: "steve",
     email: "steve@gmail.com",
     password: "foo123",
   },
-  %User{
+  %{
     username: "mclatte",
     email: "mclatte@gmail.com",
     password: "foo123",
   },
-  %User{
+  %{
     username: "teun",
     email: "teun@gmail.com",
     password: "foo123",
   },
-  %User{
+  %{
     username: "mirko",
     email: "mirko@gmail.com",
     password: "foo123",
   },
-  %User{
+  %{
     username: "rene",
     email: "rene@gmail.com",
     password: "foo123",
   }
 ]
 Enum.each(users, fn user ->
-  Repo.insert!(user)
+  Repo.insert!(User.changeset(%User{}, user))
+end)
+oauth_users = [
+  %{
+    email: "zippyqtpie@gmail.com",
+    username: "zippy"
+  }
+]
+Enum.each(oauth_users, fn user ->
+  Repo.insert!(User.oauth_changeset(%User{}, user))
 end)
 
 # Interests
@@ -133,6 +137,6 @@ Enum.each(Repo.all(User), fn user ->
         follower_id: 1,
         following_id: user.id
       })
-    _ -> # noop
+    _ -> :ok
   end
 end)
