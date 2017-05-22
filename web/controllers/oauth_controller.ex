@@ -24,7 +24,7 @@ defmodule Lift.OAuthController do
     |> where(oauth: true)
     |> Repo.one
   end
-  defp find_oauth_user("facebook", %{"id" => id}) do
+  defp find_oauth_user("facebook", %{body: %{"id" => id}}) do
     Repo.one(from u in User, where: u.oauth == true and u.facebook_id == ^id)
   end
 
