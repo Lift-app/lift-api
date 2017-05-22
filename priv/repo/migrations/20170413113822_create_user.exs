@@ -10,7 +10,7 @@ defmodule Lift.Repo.Migrations.CreateUser do
       add :avatar,        :string
       add :onboarded,     :boolean
       add :oauth,         :boolean, default: false
-      add :facebook_id,   :integer
+      add :facebook_id,   :string
 
       timestamps()
     end
