@@ -55,7 +55,8 @@ end)
 oauth_users = [
   %{
     email: "zippyqtpie@gmail.com",
-    username: "zippy"
+    username: "zippy",
+    oauth: true
   }
 ]
 Enum.each(oauth_users, fn user ->

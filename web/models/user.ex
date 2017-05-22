@@ -10,13 +10,13 @@ defmodule Lift.User do
 
     field :username,      :string
     field :email,         :string
-    field :bio,           :string
     field :password,      :string, virtual: true
     field :password_hash, :string
     field :banned,        :boolean, default: false
     field :avatar,        Lift.Avatar.Type
     field :onboarded,     :boolean, default: false
     field :oauth,         :boolean, default: false
+    field :facebook_id,   :integer
     field :following,     :boolean, virtual: true
     field :followers,     :integer, virtual: true, default: 0
 
@@ -24,8 +24,10 @@ defmodule Lift.User do
   end
 
   @required_fields ~w(username email)a
-  @optional_fields ~w(password bio)a
-  @required_oauth_fields ~w(email)a
+  @optional_fields ~w(password)a
+
+  @required_oauth_fields ~w(username oauth)a
+  @optional_oauth_fields ~w(email facebook_id)a
 
   def find_by_email(email \\ "") do
     from u in __MODULE__, where: ilike(u.email, ^email)
@@ -54,8 +56,9 @@ defmodule Lift.User do
 
   def oauth_changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, @required_oauth_fields)
+    |> cast(params, @required_oauth_fields ++ @optional_oauth_fields)
     |> unique_constraint(:email)
+    |> unique_constraint(:facebook_id)
     |> validate_required(@required_oauth_fields)
   end
 
