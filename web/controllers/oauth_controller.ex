@@ -5,7 +5,6 @@ defmodule Lift.OAuthController do
 
   defp get_user!("google", client) do
     OAuth2.Client.get!(client, "https://www.googleapis.com/plus/v1/people/me/openIdConnect")
-    |> Map.fetch!(:body)
   end
   defp get_user!("facebook", client) do
     OAuth2.Client.get!(client, "/me", fields: "id")
@@ -24,7 +23,7 @@ defmodule Lift.OAuthController do
     |> where(oauth: true)
     |> Repo.one
   end
-  defp find_oauth_user("facebook", %{body: %{"id" => id}}) do
+  defp find_oauth_user("facebook", %{"id" => id}) do
     Repo.one(from u in User, where: u.oauth == true and u.facebook_id == ^id)
   end
 
@@ -34,7 +33,7 @@ defmodule Lift.OAuthController do
 
   def callback(conn, %{"provider" => provider, "code" => code}) do
     client = get_token!(provider, code)
-    body = get_user!(provider, client)
+    body = get_user!(provider, client) |> Map.fetch!(:body)
     user = find_oauth_user(provider, body)
 
     if user do
