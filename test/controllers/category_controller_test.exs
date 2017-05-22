@@ -25,7 +25,7 @@ defmodule Lift.CategoryControllerTest do
   test "GET /categories/:id renders a single category", %{conn: conn} do
     category = insert(:category)
 
-    conn = get(conn, category_path(conn, :show, category.id))
+    conn = get(conn, category_path(conn, :show, category.name))
 
     assert json_response(conn, 200) == render_json("show.json", category: category)
   end
