@@ -36,7 +36,10 @@ defmodule Lift.Router do
 
     scope "/posts" do
       resources "/", PostController, except: [:new, :edit]
+
       get "/voorjou", PostController, :voorjou
+
+      get "/search/:query", PostController, :search
 
       resources "/:post_id/comments", CommentController, only: [:index, :create]
 

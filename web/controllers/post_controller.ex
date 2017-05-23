@@ -20,6 +20,18 @@ defmodule Lift.PostController do
     render(conn, "index.json", posts: posts)
   end
 
+  def search(conn, %{"query" => query} = params, user, _claims) do
+    posts =
+      Post
+      |> Post.ordered
+      |> Post.search(query)
+      |> Post.with_associations
+      |> Post.with_liked(user.id)
+      |> Repo.paginate(params)
+
+    render(conn, "index.json", posts: posts)
+  end
+
   def index(conn, params, user, _claims) do
     posts =
       Post
