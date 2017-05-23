@@ -20,6 +20,11 @@ defmodule Lift.Post do
   @required_fields ~w(category_id type)a
   @optional_fields ~w(body anonymous)a
 
+  def search(query, search_term) do
+    from p in query,
+      where: ilike(p.body, ^"%#{search_term}%")
+  end
+
   def ordered(query) do
     order_by(query, desc: :inserted_at)
   end
