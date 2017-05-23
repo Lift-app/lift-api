@@ -2,11 +2,9 @@ defmodule Lift.UserController do
   use Lift.Web, :controller
   use Guardian.Phoenix.Controller
 
-  alias Lift.{User, Category, CategoryView, OTA}
+  alias Lift.{User, Category}
 
-  plug Guardian.Plug.EnsureAuthenticated,
-    [handler: Lift.TokenController]
-    when not action in [:make_invite]
+  plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
   def me(conn, _params, user, _claims) do
     user = Repo.preload(user, [:categories])
@@ -16,40 +14,38 @@ defmodule Lift.UserController do
   def show(conn, %{"id" => id}, user, _claims) do
     user =
       User
-      |> preload([:categories, :follows])
+      |> preload([:categories, :follows, :profile_info])
       |> User.with_following(user.id)
       |> Repo.get!(id)
 
     render(conn, "profile.json", user: user)
   end
 
-  def update_interests(conn, %{"interest_ids" => interest_ids}, user, _claims) do
-    user = Repo.preload(user, [:categories])
-    interests = String.split(interest_ids, ",")
-    categories = Category |> where([c], c.id in ^interests) |> Repo.all
-
-    changeset =
-      user
-      |> Ecto.Changeset.change
-      |> Ecto.Changeset.put_assoc(:categories, categories)
-
-    case Repo.update(changeset) do
-      {:ok, user} ->
-        render(conn, CategoryView, "index.json", categories: user.categories)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(Lift.ChangesetView, "error.json", changeset: changeset)
-    end
-  end
-
   def update(conn, user_params, user, _claims) do
-    changeset = user |> User.changeset(user_params)
+    user = Repo.preload(user, [:profile_info, :categories])
+    changeset =
+      cond do
+        user_params["profile"] && user_params["interests"] ->
+          categories = Category |> where([c], c.id in ^user_params["interests"]) |> Repo.all
+
+          User.changeset(user, user_params)
+          |> Ecto.Changeset.cast_assoc(:profile_info, user_params["profile"])
+          |> Ecto.Changeset.cast_assoc(:categories, categories)
+        user_params["profile"] ->
+          User.changeset(user, user_params)
+          |> Ecto.Changeset.cast_assoc(:profile_info, user_params["profile"])
+        user_params["interests"] ->
+          categories = Category |> where([c], c.id in ^user_params["interests"]) |> Repo.all
+
+          User.changeset(user, user_params)
+          |> Ecto.Changeset.put_assoc(:categories, categories)
+        :otherwise ->
+          User.changeset(user, user_params)
+      end
 
     case Repo.update(changeset) do
       {:ok, _user} ->
-        conn
-        |> send_resp(:no_content, "")
+        send_resp(conn, :no_content, "")
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -69,9 +65,5 @@ defmodule Lift.UserController do
         |> put_status(:unprocessable_entity)
         |> render(Lift.ChangesetView, "error.json", changeset: changeset)
     end
-  end
-
-  def make_invite(conn, _params, _user, _claims) do
-    json(conn, %{invite_token: OTA.generate_signup_token()})
   end
 end

@@ -6,7 +6,8 @@ defmodule Lift.User do
     many_to_many :categories, Lift.Category,
       join_through: "user_interests",
       on_replace: :delete
-    has_many :follows, Lift.Follow, foreign_key: :following_id
+    has_many :follows,      Lift.Follow, foreign_key: :following_id
+    has_many :profile_info, Lift.ProfileInfo, on_replace: :delete
 
     field :username,      :string
     field :email,         :string
