@@ -14,10 +14,10 @@ defmodule Lift.UserControllerTest do
 
   test "PUT /users/me/interests/:interest_ids updates interests", %{conn: conn} do
     categories = insert_list(3, :category)
-    category_ids = categories |> Enum.map(&(&1.id)) |> Enum.join(",")
+    category_ids = categories |> Enum.map(&(&1.id))
 
-    conn = put(conn, "/users/me/interests", %{"interest_ids" => category_ids})
+    conn = put(conn, "/users/me", %{"interests" => category_ids})
 
-    assert json_response(conn, 200)
+    assert response(conn, 204)
   end
 end

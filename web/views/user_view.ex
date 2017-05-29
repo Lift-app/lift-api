@@ -34,15 +34,14 @@ defmodule Lift.UserView do
   end
 
   def render("profile.json", %{user: user}) do
-    IO.inspect user
     %{
       id: user.id,
       username: user.username,
-      bio: user.bio,
       following: user.following,
       interests: render_many(user.categories, Lift.CategoryView, "category.json"),
       avatar: user_avatar(user),
       followers: length(user.follows),
+      profile: render_one(user.profile_info, Lift.ProfileInfoView, "info.json"),
 
       created_at: user.inserted_at
     }
