@@ -40,7 +40,8 @@ defmodule Lift.UserView do
       following: user.following,
       interests: render_many(user.categories, Lift.CategoryView, "category.json"),
       avatar: user_avatar(user),
-      followers: length(user.follows),
+      follower_count: length(user.follower_users),
+      following_count: length(user.following_users),
       profile: render_one(user.profile_info, Lift.ProfileInfoView, "info.json"),
 
       created_at: user.inserted_at

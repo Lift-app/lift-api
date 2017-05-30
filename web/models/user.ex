@@ -6,7 +6,8 @@ defmodule Lift.User do
     many_to_many :categories, Lift.Category,
       join_through: "user_interests",
       on_replace: :delete
-    has_many :follows,      Lift.Follow, foreign_key: :following_id
+    has_many :follower_users, Lift.Follow, foreign_key: :following_id
+    has_many :following_users, Lift.Follow, foreign_key: :follower_id
     has_many :profile_info, Lift.ProfileInfo, on_replace: :delete
 
     field :username,      :string
@@ -19,7 +20,6 @@ defmodule Lift.User do
     field :oauth,         :boolean, default: false
     field :facebook_id,   :string
     field :following,     :boolean, virtual: true
-    field :followers,     :integer, virtual: true, default: 0
 
     timestamps()
   end
