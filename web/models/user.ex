@@ -60,6 +60,7 @@ defmodule Lift.User do
     |> cast(params, @required_oauth_fields ++ @optional_oauth_fields)
     |> unique_constraint(:email)
     |> unique_constraint(:facebook_id)
+    |> validate_length(:username, min: 3)
     |> validate_required(@required_oauth_fields)
   end
 
@@ -72,6 +73,7 @@ defmodule Lift.User do
   defp validations(struct) do
     struct
     |> validate_format(:email, ~r/.+@.+\..+/)
+    |> validate_length(:username, min: 3)
     |> validate_length(:password, min: 5)
   end
 

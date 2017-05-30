@@ -24,7 +24,7 @@ defmodule Lift.Router do
         put "/interests", UserController, :update_interests
       end
 
-      get "/:id", UserController, :show
+      get "/:username", UserController, :show
     end
 
     scope "/categories" do

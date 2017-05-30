@@ -8,6 +8,7 @@ defmodule Lift.UserControllerTest do
   test "routes require authentication" do
     conn = build_conn()
 
+    assert get(conn, "/users/steven") |> json_response(401)
     assert get(conn, "/users/me") |> json_response(401)
     assert put(conn, "/users/me/interests", %{}) |> json_response(401)
   end
