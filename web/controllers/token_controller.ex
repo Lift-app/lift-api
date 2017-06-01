@@ -13,7 +13,8 @@ defmodule Lift.TokenController do
   def create(conn, %{"email" => email, "password" => password}) do
     case Auth.verify(email, password) do
       {:ok, user} ->
-        json(conn, %{jwt: Auth.generate_token(user)})
+        jwt = Auth.generate_token(user)
+        render(conn, "login_user.json", user: Map.put(user, :jwt, jwt))
       {:error, _reason} ->
         conn
         |> put_status(:unprocessable_entity)
