@@ -26,26 +26,11 @@ defmodule Lift.UserController do
   end
 
   def update(conn, user_params, user, _claims) do
-    user = Repo.preload(user, [:profile_info, :categories])
     changeset =
-      cond do
-        user_params["profile"] && user_params["interests"] ->
-          categories = Category |> where([c], c.id in ^user_params["interests"]) |> Repo.all
-
-          User.changeset(user, user_params)
-          |> Ecto.Changeset.cast_assoc(:profile_info, user_params["profile"])
-          |> Ecto.Changeset.cast_assoc(:categories, categories)
-        user_params["profile"] ->
-          User.changeset(user, user_params)
-          |> Ecto.Changeset.cast_assoc(:profile_info, user_params["profile"])
-        user_params["interests"] ->
-          categories = Category |> where([c], c.id in ^user_params["interests"]) |> Repo.all
-
-          User.changeset(user, user_params)
-          |> Ecto.Changeset.put_assoc(:categories, categories)
-        :otherwise ->
-          User.changeset(user, user_params)
-      end
+      user
+      |> Repo.preload([:profile_info])
+      |> Ecto.Changeset.cast(user_params, [])
+      |> Ecto.Changeset.cast_assoc(:profile_info)
 
     case Repo.update(changeset) do
       {:ok, _user} ->
