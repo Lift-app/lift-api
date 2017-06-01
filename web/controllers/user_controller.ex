@@ -7,7 +7,11 @@ defmodule Lift.UserController do
   plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
   def me(conn, _params, user, _claims) do
-    user = Repo.preload(user, [:categories])
+    user =
+      User
+      |> preload([:categories, :follower_users, :following_users, :profile_info])
+      |> User.with_following(user.id)
+      |> Repo.get!(user.id)
     render(conn, "authenticated_user.json", user: user)
   end
 
