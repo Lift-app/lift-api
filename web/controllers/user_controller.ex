@@ -12,6 +12,7 @@ defmodule Lift.UserController do
       |> preload([:categories, :follower_users, :following_users, :profile_info])
       |> User.with_following(user.id)
       |> Repo.get!(user.id)
+
     render(conn, "authenticated_user.json", user: user)
   end
 
@@ -27,10 +28,21 @@ defmodule Lift.UserController do
 
   def update(conn, user_params, user, _claims) do
     changeset =
-      user
-      |> Repo.preload([:profile_info])
-      |> Ecto.Changeset.cast(user_params, [])
-      |> Ecto.Changeset.cast_assoc(:profile_info)
+      if user_params["categories"] do
+        categories =
+          from(c in Category, where: c.id in ^user_params["categories"]) |> Repo.all
+
+        user
+        |> Repo.preload([:profile_info, :categories])
+        |> Ecto.Changeset.cast(user_params, [])
+        |> Ecto.Changeset.cast_assoc(:profile_info)
+        |> Ecto.Changeset.put_assoc(:categories, categories)
+      else
+        user
+        |> Repo.preload([:profile_info])
+        |> Ecto.Changeset.cast(user_params, [])
+        |> Ecto.Changeset.cast_assoc(:profile_info)
+      end
 
     case Repo.update(changeset) do
       {:ok, _user} ->
