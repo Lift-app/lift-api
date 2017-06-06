@@ -1,7 +1,7 @@
 defmodule Lift.OAuthController do
   use Lift.Web, :controller
 
-  alias Lift.{User, Auth, Google, Facebook}
+  alias Lift.{User, Auth, Google, Facebook, TokenView}
 
   defp get_user!("google", client) do
     OAuth2.Client.get!(client, "https://www.googleapis.com/plus/v1/people/me/openIdConnect")
@@ -38,7 +38,7 @@ defmodule Lift.OAuthController do
 
     if user do
       jwt = Auth.generate_token(user)
-      render(conn, "login_user.json", user: Map.put(user, :jwt, jwt))
+      render(conn, TokenView, "login_user.json", user: Map.put(user, :jwt, jwt))
     else
       conn
       |> put_status(:unprocessable_entity)
