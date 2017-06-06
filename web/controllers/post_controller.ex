@@ -8,6 +8,23 @@ defmodule Lift.PostController do
 
   plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
+  def popular(conn, %{"offset" => offset, "page" => page} = params, user, _claims) do
+    radius =
+      with {o, _} <- Integer.parse(offset || "5"),
+           {p, _} <- Integer.parse(page   || "0"),
+       do: (p * o)..(((p + 1) * o) - 1)
+
+    posts =
+      Post
+      |> Post.with_associations
+      |> Post.with_liked(user.id)
+      |> Repo.all
+      |> Post.order_by_likes
+      |> Enum.slice(radius)
+
+    render(conn, "index.json", posts: posts)
+  end
+
   def voorjou(conn, params, user, _claims) do
     user = Repo.preload(user, [:categories, :following_users])
     posts =
