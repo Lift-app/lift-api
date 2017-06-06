@@ -29,6 +29,10 @@ defmodule Lift.Post do
     order_by(query, desc: :inserted_at)
   end
 
+  def order_by_likes(posts) do
+    posts |> Enum.sort(&(length(&1.likes) > length(&2.likes)))
+  end
+
   def with_associations(query) do
     preload(query, [:user, [category: :posts], :comments, :likes])
   end
