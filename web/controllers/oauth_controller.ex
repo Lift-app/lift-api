@@ -37,7 +37,8 @@ defmodule Lift.OAuthController do
     user = find_oauth_user(provider, body)
 
     if user do
-      json conn, %{jwt: Auth.generate_token(user)}
+      jwt = Auth.generate_token(user)
+      render(conn, "login_user.json", user: Map.put(user, :jwt, jwt))
     else
       conn
       |> put_status(:unprocessable_entity)
