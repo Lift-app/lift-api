@@ -34,12 +34,14 @@ defmodule Lift.UserController do
 
         user
         |> Repo.preload([:profile_info, :categories])
+        |> Ecto.change
         |> Ecto.Changeset.cast(user_params, [])
         |> Ecto.Changeset.cast_assoc(:profile_info)
         |> Ecto.Changeset.put_assoc(:categories, categories)
       else
         user
         |> Repo.preload([:profile_info])
+        |> Ecto.change
         |> Ecto.Changeset.cast(user_params, [])
         |> Ecto.Changeset.cast_assoc(:profile_info)
       end
