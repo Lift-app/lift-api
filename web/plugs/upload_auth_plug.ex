@@ -14,9 +14,7 @@ defmodule Lift.UploadAuthPlug do
         _ -> true
       end
 
-    IO.inspect(consume_token)
-
-    case OTA.verify_media_token(token) do
+    case OTA.verify_media_token(token, consume_token) do
       :ok ->
         conn
       {:error, reason} ->
