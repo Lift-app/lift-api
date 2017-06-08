@@ -8,6 +8,11 @@ defmodule Lift.UploadAuthPlug do
   def call(%{params: params} = conn, opts) do
     token = Map.get(params, "token")
     handler = Map.get(opts, :handler)
+    consume_token =
+      case Plug.Conn.get_req_header(conn, "range") do
+        ["bytes=0-1"] -> true
+        _ -> false
+      end
 
     case OTA.verify_media_token(token) do
       :ok ->

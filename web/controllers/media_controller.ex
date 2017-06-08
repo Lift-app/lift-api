@@ -8,22 +8,18 @@ defmodule Lift.MediaController do
   def post(conn, %{"id" => id}) do
     post = from(p in Post, where: p.id == ^id and p.type == "audio") |> Repo.one!
     audio_path = Audio.url({"#{id}.mp3", post})
-    content_range = build_content_range(audio_path)
 
     conn
     |> put_resp_header("content-type", "audio/mpeg")
-    |> put_resp_header("content-range", content_range)
     |> Plug.Conn.send_file(200, audio_path)
   end
 
   def comment(conn, %{"id" => id}) do
     comment = from(c in Comment, where: c.id == ^id and c.type == "audio") |> Repo.one!
     audio_path = Audio.url({"#{id}.mp3", comment})
-    content_range = build_content_range(audio_path)
 
     conn
     |> put_resp_header("content-type", "audio/mpeg")
-    |> put_resp_header("content-range", content_range)
     |> Plug.Conn.send_file(200, audio_path)
   end
 
@@ -35,10 +31,5 @@ defmodule Lift.MediaController do
     conn
     |> put_resp_content_type("image/png")
     |> Plug.Conn.send_file(200, image_path)
-  end
-
-  defp build_content_range(audio_path) do
-    %{size: size} = File.stat!(audio_path)
-    "bytes 0-#{size - 1}/#{size}"
   end
 end
