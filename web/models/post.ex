@@ -30,7 +30,7 @@ defmodule Lift.Post do
   end
 
   def with_associations(query) do
-    preload(query, [:user, :category, :comments, :likes])
+    preload(query, [:user, [category: :posts], :comments, :likes])
   end
 
   def voorjou(query, params \\ []) do
