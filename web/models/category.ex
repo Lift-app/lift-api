@@ -4,18 +4,20 @@ defmodule Lift.Category do
   schema "categories" do
     has_many :posts, Lift.Post
 
-    field :name,        :string
-    field :description, :string
-    field :post_count,  :integer, virtual: true, default: 0
+    field :name,          :string
+    field :description,   :string
+    field :post_count,    :integer, virtual: true, default: 0
+    field :is_interested, :boolean, default: false, virtual: true
   end
 
   @required_fields ~w(name)a
   @optional_fields ~w(description)a
 
-  def with_post_count(query) do
+  def with_is_interested(query, user_id) do
     from c in query,
-      left_join: p in assoc(c, :posts),
-      select: %{c | post_count: count(p.id)},
+      left_join: ui in "user_interests",
+        on: ui.user_id == ^user_id and ui.category_id == c.id,
+      select: %{c | is_interested: count(ui.id) != 0},
       group_by: c.id
   end
 

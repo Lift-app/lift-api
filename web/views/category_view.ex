@@ -10,6 +10,12 @@ defmodule Lift.CategoryView do
   end
 
   def render("category.json", %{category: category}) do
-    Map.take(category, [:id, :name, :description, :post_count])
+    %{
+      id: category.id,
+      name: category.name,
+      description: category.description,
+      post_count: length(category.posts),
+      is_interested: category.is_interested
+    }
   end
 end

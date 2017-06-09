@@ -6,7 +6,12 @@ defmodule Lift.CategoryController do
   plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
   def index(conn, _params) do
-    categories = Category |> Category.with_post_count |> Repo.all
+    user = Guardian.Plug.current_resource(conn)
+    categories =
+      Category
+      |> preload(:posts)
+      |> Category.with_is_interested(user.id)
+      |> Repo.all
     render(conn, "index.json", categories: categories)
   end
 
@@ -27,9 +32,11 @@ defmodule Lift.CategoryController do
   end
 
   def show(conn, %{"name" => name}) do
+    user = Guardian.Plug.current_resource(conn)
     category =
       from(c in Category, where: ilike(c.name, ^name))
-      |> Category.with_post_count
+      |> preload(:posts)
+      |> Category.with_is_interested(user.id)
       |> Repo.one!
 
     render(conn, "show.json", category: category)
