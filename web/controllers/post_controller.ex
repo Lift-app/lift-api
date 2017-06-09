@@ -9,13 +9,13 @@ defmodule Lift.PostController do
   plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
   def voorjou(conn, params, user, _claims) do
-    user = Repo.preload(user, :categories)
+    user = Repo.preload(user, [:categories, :following_users])
     posts =
       Post
       |> Post.ordered
       |> Post.with_associations
       |> Post.with_liked(user.id)
-      |> Post.by_interests(user.categories)
+      |> Post.voorjou(interests: user.categories, followers: user.following_users)
       |> Repo.paginate(params)
 
     render(conn, "index.json", posts: posts)
