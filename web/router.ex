@@ -35,9 +35,9 @@ defmodule Lift.Router do
     end
 
     scope "/posts" do
-      resources "/", PostController, except: [:new, :edit]
-
       get "/voorjou", PostController, :voorjou
+
+      resources "/", PostController, except: [:new, :edit]
 
       get "/search/:query", PostController, :search
 

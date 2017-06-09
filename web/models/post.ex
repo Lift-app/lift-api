@@ -33,6 +33,12 @@ defmodule Lift.Post do
     preload(query, [:user, :category, :comments, :likes])
   end
 
+  def by_interests(query, interests) do
+    IO.inspect interests
+    interest_ids = Enum.map(interests, &(&1.id))
+    from p in query, where: p.category_id in ^interest_ids
+  end
+
   def with_liked(query, user_id) do
     from p in query,
       left_join: ul in assoc(p, :likes), on: ul.user_id == ^user_id,
