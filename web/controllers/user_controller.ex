@@ -9,7 +9,7 @@ defmodule Lift.UserController do
   def me(conn, _params, user, _claims) do
     user =
       User
-      |> preload([:categories, :follower_users, :following_users, :profile_info])
+      |> User.with_associations
       |> User.with_following(user.id)
       |> Repo.get!(user.id)
 
@@ -19,7 +19,7 @@ defmodule Lift.UserController do
   def show(conn, %{"username" => username}, user, _claims) do
     user =
       User
-      |> preload([:categories, :follower_users, :following_users, :profile_info])
+      |> User.with_associations
       |> User.with_following(user.id)
       |> Repo.get_by!(username: username)
 

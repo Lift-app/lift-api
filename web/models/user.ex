@@ -34,6 +34,10 @@ defmodule Lift.User do
     from u in __MODULE__, where: ilike(u.email, ^email)
   end
 
+  def with_associations(query) do
+    preload(query, [[categories: :posts], :follower_users, :following_users, :profile_info])
+  end
+
   def with_following(query, user_id) do
     from u in query,
       left_join: f in Lift.Follow,
