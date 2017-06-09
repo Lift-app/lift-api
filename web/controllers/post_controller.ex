@@ -8,6 +8,17 @@ defmodule Lift.PostController do
 
   plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
 
+  def popular(conn, params, user, _claims) do
+    posts =
+      Post
+      |> Post.with_associations
+      |> Post.order_by_likes
+      |> Post.with_liked(user.id)
+      |> Repo.paginate(params)
+
+    render(conn, "index.json", posts: posts)
+  end
+
   def voorjou(conn, params, user, _claims) do
     user = Repo.preload(user, [:categories, :following_users])
     posts =

@@ -29,6 +29,12 @@ defmodule Lift.Post do
     order_by(query, desc: :inserted_at)
   end
 
+  def order_by_likes(query) do
+    from p in query,
+      left_join: l in assoc(p, :likes),
+      order_by: [desc: count(l.id)]
+  end
+
   def with_associations(query) do
     preload(query, [:user, [category: :posts], :comments, :likes])
   end
