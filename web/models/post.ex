@@ -36,12 +36,12 @@ defmodule Lift.Post do
   def voorjou(query, params \\ []) do
     %{interests: interests, followers: followers} = Enum.into(params, %{})
 
-     followers_ids = Enum.map(followers, &(&1.following_id))
-     interest_ids = Enum.map(interests, &(&1.id))
+    followers_ids = Enum.map(followers, &(&1.following_id))
+    interest_ids = Enum.map(interests, &(&1.id))
 
-     from p in query,
-       where: (p.user_id in ^followers_ids and p.anonymous == false) or
-              (p.category_id in ^interest_ids)
+    from p in query,
+      where: (p.user_id in ^followers_ids and p.anonymous == false) or
+             (p.category_id in ^interest_ids)
   end
 
   def with_liked(query, user_id) do
