@@ -34,7 +34,8 @@ defmodule Lift.CategoryViewTest do
       id: category.id,
       name: category.name,
       description: category.description,
-      post_count: 0
+      post_count: 0,
+      is_interested: false
     }
   end
 end

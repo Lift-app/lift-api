@@ -44,7 +44,8 @@ defmodule Lift.PostViewTest do
         id: post.category.id,
         name: post.category.name,
         description: post.category.description,
-        post_count: post.category.post_count
+        post_count: post.category.post_count,
+        is_interested: false
       },
       user: %{
         id: post.user.id,

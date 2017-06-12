@@ -23,7 +23,7 @@ defmodule Lift.CategoryController do
         conn
         |> put_status(:created)
         |> put_resp_header("location", post_path(conn, :show, category))
-        |> render("show.json", category: category)
+        |> render("show.json", category: Repo.preload(category, :posts))
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)

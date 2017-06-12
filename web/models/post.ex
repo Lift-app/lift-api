@@ -20,6 +20,8 @@ defmodule Lift.Post do
   @required_fields ~w(category_id type)a
   @optional_fields ~w(body anonymous)a
 
+  def associations, do: [:user, [category: :posts], :comments, :likes]
+
   def search(query, search_term) do
     from p in query,
       where: ilike(p.body, ^"%#{search_term}%")
@@ -36,7 +38,7 @@ defmodule Lift.Post do
   end
 
   def with_associations(query) do
-    preload(query, [:user, [category: :posts], :comments, :likes])
+    preload(query, ^associations())
   end
 
   def voorjou(query, params \\ []) do
