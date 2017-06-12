@@ -70,11 +70,9 @@ defmodule Lift.User do
 
   def decide_changeset(struct, params \\ %{}, oauth \\ false)
   def decide_changeset(struct, params, true) do
-    IO.inspect "a"
     oauth_changeset(struct, params)
   end
   def decide_changeset(struct, params, false) do
-    IO.inspect "b"
     changeset(struct, params)
   end
 
