@@ -77,7 +77,7 @@ defmodule Lift.PostController do
         conn
         |> put_status(:created)
         |> put_resp_header("location", post_path(conn, :show, post))
-        |> render("show.json", post: Repo.preload(post, [:category, :user, :comments, :likes]))
+        |> render("show.json", post: Repo.preload(post, [:user, [category: :posts], :comments, :likes]))
       {:error, :bad_audio} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -97,7 +97,7 @@ defmodule Lift.PostController do
         conn
         |> put_status(:created)
         |> put_resp_header("location", post_path(conn, :show, post))
-        |> render("show.json", post: Repo.preload(post, [:category, :user, :comments, :likes]))
+        |> render("show.json", post: Repo.preload(post, [:user, [category: :posts], :comments, :likes]))
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
