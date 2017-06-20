@@ -34,11 +34,6 @@ users = [
     password: "foo123",
   },
   %{
-    username: "teun",
-    email: "teun@gmail.com",
-    password: "foo123",
-  },
-  %{
     username: "mirko",
     email: "mirko@gmail.com",
     password: "foo123",
@@ -60,12 +55,7 @@ oauth_users = [
   },
   %{
     email: "teunkelting7@gmail.com",
-    username: "teunkeltje",
-    oauth: true
-  },
-  %{
     username: "teuntje",
-    facebook_id: "1485729384817893",
     oauth: true
   }
 ]
