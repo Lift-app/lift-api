@@ -31,8 +31,7 @@ defmodule Lift.UserController do
 
     case Repo.insert(changeset) do
       {:ok, _user} ->
-        conn
-        |> put_status(:created)
+        send_resp(conn, :no_content, "")
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
