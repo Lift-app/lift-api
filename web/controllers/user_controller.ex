@@ -4,7 +4,7 @@ defmodule Lift.UserController do
 
   alias Lift.{User, Category}
 
-  plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController when not action in [:create]
+  plug Guardian.Plug.EnsureAuthenticated, [handler: Lift.TokenController] when not action in [:create]
 
   def me(conn, _params, user, _claims) do
     user =
