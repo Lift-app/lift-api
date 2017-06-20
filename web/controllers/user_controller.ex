@@ -27,7 +27,10 @@ defmodule Lift.UserController do
   end
 
   def create(conn, user_params, _user, _claims) do
-    changeset = User.changeset(%User{}, user_params)
+    categories = Repo.all(Category)
+    changeset =
+      User.changeset(%User{}, user_params)
+      |> Ecto.Changeset.put_assoc(:categories, categories)
 
     case Repo.insert(changeset) do
       {:ok, _user} ->
