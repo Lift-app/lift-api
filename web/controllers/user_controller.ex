@@ -4,7 +4,7 @@ defmodule Lift.UserController do
 
   alias Lift.{User, Category}
 
-  plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController
+  plug Guardian.Plug.EnsureAuthenticated, handler: Lift.TokenController when not action in [:create]
 
   def me(conn, _params, user, _claims) do
     user =
@@ -24,6 +24,20 @@ defmodule Lift.UserController do
       |> Repo.get_by!(username: username)
 
     render(conn, "profile.json", user: user)
+  end
+
+  def create(conn, user_params, _user, _claims) do
+    changeset = User.changeset(%User{}, user_params)
+
+    case Repo.insert(changeset) do
+      {:ok, _user} ->
+        conn
+        |> put_status(:created)
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(Lift.ChangesetView, "error.json", changeset: changeset)
+    end
   end
 
   def update(conn, user_params, user, _claims) do

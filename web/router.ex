@@ -17,6 +17,8 @@ defmodule Lift.Router do
       put "/:id/follow", FollowController, :follow
       put "/:id/unfollow", FollowController, :unfollow
 
+      post "/", UserController, :create
+
       scope "/me" do
         get "/", UserController, :me
         put "/", UserController, :update
